@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Gestion des utilisateurs</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for utilisateur in utilisateurs %}
+                <tr>
+                    <td>{{ utilisateur.id }}</td>
+                    <td>{{ utilisateur.nom }}</td>
+                    <td>{{ utilisateur.prenom }}</td>
+                    <td>{{ utilisateur.email }}</td>
+                    <td>
+                        <a href="{{ path('utilisateurs.edit', {'id': utilisateur.id}) }}" class="btn btn-secondary">Editer</a>
+                        <form method="POST" action="{{ path('utilisateurs.delete', {id: utilisateur.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer cet utilisateur ?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+                            <button class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucun utilisateur</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('utilisateurs.new') }}" class="btn btn-primary">Créer un utilisateur</a>
+    </div>
+{% endblock %}
