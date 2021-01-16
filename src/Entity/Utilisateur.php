@@ -57,104 +57,80 @@ class Utilisateur
      */
     private $estCadre;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getNom(): ?string
-    {
+    public function getNom(): ?string {
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
-    {
+    public function setNom(string $nom): self {
         $this->nom = $nom;
-
         return $this;
     }
 
-    public function getPrenom(): ?string
-    {
+    public function getPrenom(): ?string {
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
-    {
+    public function setPrenom(string $prenom): self {
         $this->prenom = $prenom;
-
         return $this;
     }
 
-    public function getMotDePasse(): ?string
-    {
+    public function getMotDePasse(): ?string {
         return $this->motDePasse;
     }
 
-    public function setMotDePasse(string $motDePasse): self
-    {
+    public function setMotDePasse(string $motDePasse): self {
         $this->motDePasse = $motDePasse;
 
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTimeInterface
-    {
+    public function getDateNaissance(): ?\DateTimeInterface {
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
-    {
+    public function setDateNaissance(\DateTimeInterface $dateNaissance): self {
         $this->dateNaissance = $dateNaissance;
-
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
+    public function getEmail(): ?string {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
-    {
+    public function setEmail(string $email): self {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getTelephone(): ?string
-    {
+    public function getTelephone(): ?string {
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): self
-    {
+    public function setTelephone(string $telephone): self {
         $this->telephone = $telephone;
-
         return $this;
     }
 
-    public function getDateEmbauche(): ?\DateTimeInterface
-    {
+    public function getDateEmbauche(): ?\DateTimeInterface {
         return $this->dateEmbauche;
     }
 
-    public function setDateEmbauche(\DateTimeInterface $dateEmbauche): self
-    {
+    public function setDateEmbauche(\DateTimeInterface $dateEmbauche): self {
         $this->dateEmbauche = $dateEmbauche;
-
         return $this;
     }
 
-    public function getEstCadre(): ?bool
-    {
+    public function getEstCadre(): ?bool {
         return $this->estCadre;
     }
 
-    public function setEstCadre(bool $estCadre): self
-    {
+    public function setEstCadre(bool $estCadre): self {
         $this->estCadre = $estCadre;
-
         return $this;
     }
 }
