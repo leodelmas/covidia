@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
  */
-class Utilisateur
+class Utilisateur implements UserInterface,\Serializable
 {
     /**
      * @ORM\Id
@@ -132,5 +133,47 @@ class Utilisateur
     public function setEstCadre(bool $estCadre): self {
         $this->estCadre = $estCadre;
         return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->email;
+    }
+
+
+    public function getPassword(): ?string
+    {
+        return $this->motDePasse;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+    public function getSalt()
+    {
+        return null;
+
+    }
+    public function eraseCredentials()
+    {
+        
+    }
+    
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->email,
+            $this->motDePasse
+        ]);
+    }
+    public function unserialize($serialized)
+    {
+        list (
+            $this ->id,
+            $this ->email,
+            $this ->motDePasse
+        ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 }
