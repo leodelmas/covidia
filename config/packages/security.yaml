@@ -1,9 +1,8 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
        from_database:
             entity:
-                class: App\Entity\Utilisateur
+                class: App\Entity\User
                 property: email
     firewalls:
         dev:
@@ -11,23 +10,17 @@ security:
             security: false
         main:
             anonymous: true
+            form_login : 
+                check_path: login
             logout:
                 path: /logout
                 target: /
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true$
-            form_login : 
-                check_path: login
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: /app/users, roles: ROLE_ADMIN }
         - { path: /app, roles: ROLE_USER }
 
     encoders:
-        App\Entity\Utilisateur:
+        App\Entity\User:
                 algorithm: bcrypt
                 cost: 12

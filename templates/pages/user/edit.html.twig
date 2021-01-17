@@ -4,8 +4,7 @@
 
 {% block body %}
     <div class="container">
-        <a href="{{ path('utilisateurs.index') }}" class="btn btn-secondary">Retour</a>
         <h1>Editer un utilisateur</h1>
-        {{ include('pages/utilisateurs/_form.html.twig', {'button': 'Editer'}) }}
+        {{ include('pages/user/_form.html.twig', {'button': 'Editer'}) }}
     </div>
 {% endblock %}
