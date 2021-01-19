@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -75,6 +77,16 @@ class User implements UserInterface,\Serializable
      * @ORM\Column(type="boolean")
      */
     private $isAdmin;
+
+    /**
+     * @ORM\OneToMany(targetEntity=WorkingDay::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $workingDays;
+
+    public function __construct()
+    {
+        $this->workingDays = new ArrayCollection();
+    }
 
     public function getId(): ?int {
         return $this->id;
@@ -196,5 +208,35 @@ class User implements UserInterface,\Serializable
             $roles[] = 'ROLE_USER';
         }
         return array_unique($roles);
+    }
+
+    /**
+     * @return Collection|WorkingDay[]
+     */
+    public function getWorkingDays(): Collection
+    {
+        return $this->workingDays;
+    }
+
+    public function addWorkingDay(WorkingDay $workingDay): self
+    {
+        if (!$this->workingDays->contains($workingDay)) {
+            $this->workingDays[] = $workingDay;
+            $workingDay->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkingDay(WorkingDay $workingDay): self
+    {
+        if ($this->workingDays->removeElement($workingDay)) {
+            // set the owning side to null (unless already changed)
+            if ($workingDay->getUser() === $this) {
+                $workingDay->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
