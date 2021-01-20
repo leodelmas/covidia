@@ -1,36 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}WorkingDay index{% endblock %}
+{% block title %}Gestion du planning{% endblock %}
 
 {% block body %}
     <div class="container">
         <h1>Gestion du planning</h1>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>IsTeleworked</th>
-                <th>actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for working_day in working_days %}
-                <tr>
-                    <td>{{ working_day.id }}</td>
-                    <td>{{ working_day.date ? working_day.date|date('Y-m-d') : '' }}</td>
-                    <td>{{ working_day.isTeleworked ? 'Yes' : 'No' }}</td>
-                    <td>
-                        <a href="{{ path('working_day.edit', {'id': working_day.id}) }}">edit</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div id="calendar-holder"></div>
         <a href="{{ path('working_day.new') }}" class="btn btn-primary">Créer</a>
     </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            var calendarEl = document.getElementById('calendar-holder');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                defaultView: 'dayGridMonth',
+                locale: 'fr',
+                editable: true,
+                eventSources: [
+                    {
+                        url: "{{ path('fc_load_events') }}",
+                        method: "POST",
+                        extraParams: {
+                            filters: JSON.stringify({})
+                        },
+                        failure: () => {},
+                    },
+                ],
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                },
+                plugins: [ 'dayGrid', 'timeGrid' ],
+                timeZone: 'UTC',
+            });
+            calendar.render();
+        });
+    </script>
 {% endblock %}

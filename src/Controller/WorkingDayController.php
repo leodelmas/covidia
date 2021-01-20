@@ -43,7 +43,7 @@ class WorkingDayController extends AbstractController
             $entityManager->persist($workingDay);
             $entityManager->flush();
 
-            return $this->redirectToRoute('working_day_index');
+            return $this->redirectToRoute('working_day.index');
         }
 
         return $this->render('pages/working_day/new.html.twig', [
@@ -66,7 +66,7 @@ class WorkingDayController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('working_day_index');
+            return $this->redirectToRoute('working_day.index');
         }
 
         return $this->render('pages/working_day/edit.html.twig', [

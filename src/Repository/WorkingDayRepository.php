@@ -19,32 +19,17 @@ class WorkingDayRepository extends ServiceEntityRepository
         parent::__construct($registry, WorkingDay::class);
     }
 
-    // /**
-    //  * @return WorkingDay[] Returns an array of WorkingDay objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $userId
+     * @return WorkingDay[]
+     */
+    public function findAllByUser($userId): array
     {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.user = 8')
+            //->setParameter('userid', $userId)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?WorkingDay
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
