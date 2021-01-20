@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/app/planning")
+ * @Route("/planning")
  */
 class WorkingDayController extends AbstractController
 {
