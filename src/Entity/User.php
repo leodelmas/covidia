@@ -83,6 +83,12 @@ class User implements UserInterface,\Serializable
      */
     private $workingDays;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Job::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $job;
+
     public function __construct()
     {
         $this->workingDays = new ArrayCollection();
@@ -236,6 +242,18 @@ class User implements UserInterface,\Serializable
                 $workingDay->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getJob(): ?Job
+    {
+        return $this->job;
+    }
+
+    public function setJob(?Job $job): self
+    {
+        $this->job = $job;
 
         return $this;
     }

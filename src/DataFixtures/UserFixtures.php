@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Job;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -17,6 +18,13 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $job = new Job();
+        $job
+            ->setName("Développeur");
+
+        $manager->persist($job);
+        $manager->flush();
+
         $admin = new User();
         $admin
             ->setFirstname('admin')
@@ -27,7 +35,8 @@ class UserFixtures extends Fixture
             ->setHiringDate(new \DateTime())
             ->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'))
             ->setIsExecutive(false)
-            ->setIsAdmin(true);
+            ->setIsAdmin(true)
+            ->setJob($job);
         $manager->persist($admin);
 
         $user = new User();
@@ -40,9 +49,10 @@ class UserFixtures extends Fixture
             ->setHiringDate(new \DateTime())
             ->setPassword($this->passwordEncoder->encodePassword($user, 'user'))
             ->setIsExecutive(true)
-            ->setIsAdmin(false);
-        $manager->persist($user);
+            ->setIsAdmin(false)
+            ->setJob($job);
 
+        $manager->persist($user);
         $manager->flush();
     }
 }
