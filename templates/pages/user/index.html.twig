@@ -13,6 +13,7 @@
                 <th>Nom</th>
                 <th>E-mail</th>
                 <th>Téléphone</th>
+                <th>Emplois</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -24,6 +25,7 @@
                     <td>{{ user.lastname }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone }}</td>
+                    <td>{{ user.job.name }}</td>
                     <td>
                         <a href="{{ path('user.edit', {'id': user.id}) }}" class="btn btn-secondary">Editer</a>
                         <form method="POST" action="{{ path('user.delete', {id: user.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer cet utilisateur ?')">

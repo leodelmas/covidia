@@ -2,12 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Job;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
@@ -26,7 +28,12 @@ class UserType extends AbstractType
             ->add('email')
             ->add('phone')
             ->add('isExecutive')
-            ->add('isAdmin');
+            ->add('isAdmin')
+            ->add('job', EntityType::class, [
+                'class' => Job::class,
+                'required' => true,
+                'choice_label' => 'name'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
