@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\WorkingDayRepository;
+use App\Repository\WorkTimeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=WorkingDayRepository::class)
+ * @ORM\Entity(repositoryClass=WorkTimeRepository::class)
  */
-class WorkingDay
+class WorkTime
 {
     /**
      * @ORM\Id
@@ -20,7 +20,12 @@ class WorkingDay
     /**
      * @ORM\Column(type="date")
      */
-    private $date;
+    private $dateStart;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $dateEnd;
 
     /**
      * @ORM\Column(type="boolean")
@@ -28,7 +33,7 @@ class WorkingDay
     private $isTeleworked;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workingDays")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workTimes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -37,12 +42,21 @@ class WorkingDay
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface {
-        return $this->date;
+    public function getDateStart(): ?\DateTimeInterface {
+        return $this->dateStart;
     }
 
-    public function setDate(\DateTimeInterface $date): self {
-        $this->date = $date;
+    public function setDateStart(\DateTimeInterface $dateStart): self {
+        $this->dateStart = $dateStart;
+        return $this;
+    }
+
+    public function getDateEnd(): ?\DateTimeInterface {
+        return $this->dateEnd;
+    }
+
+    public function setDateEnd(\DateTimeInterface $dateEnd): self {
+        $this->dateEnd = $dateEnd;
         return $this;
     }
 

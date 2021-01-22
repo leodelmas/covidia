@@ -79,19 +79,19 @@ class User implements UserInterface,\Serializable
     private $isAdmin;
 
     /**
-     * @ORM\OneToMany(targetEntity=WorkingDay::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $workingDays;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Job::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $job;
 
+    /**
+     * @ORM\OneToMany(targetEntity=WorkTime::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $workTimes;
+
     public function __construct()
     {
-        $this->workingDays = new ArrayCollection();
+        $this->workTimes = new ArrayCollection();
     }
 
     public function getId(): ?int {
@@ -216,36 +216,6 @@ class User implements UserInterface,\Serializable
         return array_unique($roles);
     }
 
-    /**
-     * @return Collection|WorkingDay[]
-     */
-    public function getWorkingDays(): Collection
-    {
-        return $this->workingDays;
-    }
-
-    public function addWorkingDay(WorkingDay $workingDay): self
-    {
-        if (!$this->workingDays->contains($workingDay)) {
-            $this->workingDays[] = $workingDay;
-            $workingDay->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorkingDay(WorkingDay $workingDay): self
-    {
-        if ($this->workingDays->removeElement($workingDay)) {
-            // set the owning side to null (unless already changed)
-            if ($workingDay->getUser() === $this) {
-                $workingDay->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getJob(): ?Job
     {
         return $this->job;
@@ -254,6 +224,36 @@ class User implements UserInterface,\Serializable
     public function setJob(?Job $job): self
     {
         $this->job = $job;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WorkTime[]
+     */
+    public function getWorkTimes(): Collection
+    {
+        return $this->workTimes;
+    }
+
+    public function addWorkTime(WorkTime $workTime): self
+    {
+        if (!$this->workTimes->contains($workTime)) {
+            $this->workTimes[] = $workTime;
+            $workTime->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkTime(WorkTime $workTime): self
+    {
+        if ($this->workTimes->removeElement($workTime)) {
+            // set the owning side to null (unless already changed)
+            if ($workTime->getUser() === $this) {
+                $workTime->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -13,15 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/admin/users")
  */
-class UserController extends AbstractController
-{
+class UserController extends AbstractController {
+
     /**
      * @Route("/", name="user.index", methods={"GET"})
      * @param UserRepository $userRepository
      * @return Response
      */
-    public function index(UserRepository $userRepository): Response
-    {
+    public function index(UserRepository $userRepository): Response {
         return $this->render('pages/user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -32,8 +31,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
-    {
+    public function new(Request $request): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -58,8 +56,7 @@ class UserController extends AbstractController
      * @param User $user
      * @return Response
      */
-    public function edit(Request $request, User $user): Response
-    {
+    public function edit(Request $request, User $user): Response {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -81,8 +78,7 @@ class UserController extends AbstractController
      * @param User $user
      * @return Response
      */
-    public function delete(Request $request, User $user): Response
-    {
+    public function delete(Request $request, User $user): Response {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);

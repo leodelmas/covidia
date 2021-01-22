@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editer une période{% endblock %}
+
+{% block body %}
+    <h1>Editer une période</h1>
+    {{ include('pages/planning/workTime/_form.html.twig', {'button_label': 'Update'}) }}
+    <a href="{{ path('planning.index') }}">Retour</a>
+    {{ include('pages/planning/workTime/_delete.html.twig') }}
+{% endblock %}

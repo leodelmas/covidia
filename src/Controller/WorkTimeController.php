@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\WorkTime;
+use App\Form\WorkTimeType;
+use App\Repository\WorkTimeRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+/**
+ * @Route("/planning/workTime")
+ */
+class WorkTimeController extends AbstractController {
+
+    /**
+     * @Route("/new", name="workTime.new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function new(Request $request): Response {
+        $workTime = new WorkTime();
+        $form = $this->createForm(WorkTimeType::class, $workTime);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($workTime);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('workTime.index');
+        }
+
+        return $this->render('pages/planning/workTime/new.html.twig', [
+            'work_time' => $workTime,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="workTime.edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param WorkTime $workTime
+     * @return Response
+     */
+    public function edit(Request $request, WorkTime $workTime): Response {
+        $form = $this->createForm(WorkTimeType::class, $workTime);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('workTime.index');
+        }
+
+        return $this->render('pages/planning/workTime/edit.html.twig', [
+            'work_time' => $workTime,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="workTime.delete", methods={"DELETE"})
+     * @param Request $request
+     * @param WorkTime $workTime
+     * @return Response
+     */
+    public function delete(Request $request, WorkTime $workTime): Response {
+        if ($this->isCsrfTokenValid('delete'.$workTime->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($workTime);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('workTime.index');
+    }
+}

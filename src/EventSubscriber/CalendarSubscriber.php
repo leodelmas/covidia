@@ -3,7 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
-use App\Repository\WorkingDayRepository;
+use App\Repository\WorkTimeRepository;
 use CalendarBundle\CalendarEvents;
 use CalendarBundle\Entity\Event;
 use CalendarBundle\Event\CalendarEvent;
@@ -15,9 +15,9 @@ use Symfony\Component\Security\Core\Security;
 class CalendarSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var WorkingDayRepository
+     * @var WorkTimeRepository
      */
-    private $workingDayRepository;
+    private $workTimeRepository;
 
     /**
      * @var UrlGeneratorInterface
@@ -36,12 +36,12 @@ class CalendarSubscriber implements EventSubscriberInterface
 
     /**
      * CalendarSubscriber constructor.
-     * @param WorkingDayRepository $workingDayRepository
+     * @param WorkTimeRepository $workTimeRepository
      * @param UrlGeneratorInterface $router
      * @param Security $security
      */
-    public function __construct(WorkingDayRepository $workingDayRepository, UrlGeneratorInterface $router, Security $security) {
-        $this->workingDayRepository = $workingDayRepository;
+    public function __construct(WorkTimeRepository $workTimeRepository, UrlGeneratorInterface $router, Security $security) {
+        $this->workTimeRepository = $workTimeRepository;
         $this->router = $router;
         $this->security = $security;
     }
@@ -58,7 +58,7 @@ class CalendarSubscriber implements EventSubscriberInterface
      */
     public function onCalendarSetData(CalendarEvent $calendar)
     {
-        $user = $this->security->getUser();
+        /*$user = $this->security->getUser();
         $workingDays = $this->workingDayRepository->findAllByUser($user->getId());
 
         foreach ($workingDays as $workingDay) {
@@ -67,10 +67,10 @@ class CalendarSubscriber implements EventSubscriberInterface
                 new \DateTime($workingDay->getDate()->format('Y-m-d'))
             );
 
-            /*$plannedDay->setOptions([
+            $plannedDay->setOptions([
                 'backgroundColor' => 'red',
                 'borderColor' => 'red',
-            ]);*/
+            ]);
 
             $plannedDay->addOption(
                 'url',
@@ -80,6 +80,6 @@ class CalendarSubscriber implements EventSubscriberInterface
             );
 
             $calendar->addEvent($plannedDay);
-        }
+        }*/
     }
 }
