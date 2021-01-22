@@ -16,6 +16,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class WorkTimeController extends AbstractController {
 
     /**
+     * @Route("/", name="workTime.index", methods={"GET"})
+     * @param WorkTimeRepository $workTimeRepository
+     * @return Response
+     */
+    public function index(WorkTimeRepository $workTimeRepository): Response {
+        return $this->render('pages/planning/workTime/index.html.twig', [
+            'workTimes' => $workTimeRepository->findAll(),
+        ]);
+    }
+
+    /**
      * @Route("/new", name="workTime.new", methods={"GET","POST"})
      * @param Request $request
      * @return Response
@@ -30,11 +41,11 @@ class WorkTimeController extends AbstractController {
             $entityManager->persist($workTime);
             $entityManager->flush();
 
-            return $this->redirectToRoute('workTime.index');
+            return $this->redirectToRoute('planning.index');
         }
 
         return $this->render('pages/planning/workTime/new.html.twig', [
-            'work_time' => $workTime,
+            'workTime' => $workTime,
             'form' => $form->createView(),
         ]);
     }
@@ -52,11 +63,11 @@ class WorkTimeController extends AbstractController {
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('workTime.index');
+            return $this->redirectToRoute('planning.index');
         }
 
         return $this->render('pages/planning/workTime/edit.html.twig', [
-            'work_time' => $workTime,
+            'workTime' => $workTime,
             'form' => $form->createView(),
         ]);
     }
@@ -74,6 +85,6 @@ class WorkTimeController extends AbstractController {
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('workTime.index');
+        return $this->redirectToRoute('planning.index');
     }
 }

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des périodes{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Gestion des périodes</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Télétravail</th>
+                <th>Utilisateur</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for workTime in workTimes %}
+                <tr>
+                    <td>{{ workTime.id }}</td>
+                    <td>{{ workTime.dateStart|date("d/m/Y") }}</td>
+                    <td>{{ workTime.dateEnd|date("d/m/Y") }}</td>
+                    <td>{% if workTime.isTeleworked %}Oui{% else %}Non{% endif %}</td>
+                    <td>{{ workTime.user.lastname }}</td>
+                    <td>
+                        <a href="{{ path('user.edit', {'id': workTime.id}) }}" class="btn btn-secondary">Editer</a>
+                        {{ include('pages/planning/workTime/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucune période</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('workTime.new') }}" class="btn btn-primary">Créer</a>
+    </div>
+{% endblock %}

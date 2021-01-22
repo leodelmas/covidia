@@ -23,10 +23,10 @@ class WorkTimeRepository extends ServiceEntityRepository
      * @param $value
      * @return int|mixed|string
      */
-    public function findByExampleField($value)
+    public function findAllByUser($value)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.user_id = :userId')
+            ->andWhere('p.user = :userId')
             ->setParameter('userId', $value)
             ->getQuery()
             ->getResult();

@@ -3,10 +3,14 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Entity\WorkTime;
 use App\Repository\WorkTimeRepository;
 use CalendarBundle\CalendarEvents;
 use CalendarBundle\Entity\Event;
 use CalendarBundle\Event\CalendarEvent;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -46,7 +50,7 @@ class CalendarSubscriber implements EventSubscriberInterface
         $this->security = $security;
     }
 
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents(): array {
         return [
             CalendarEvents::SET_DATA => 'onCalendarSetData',
         ];
@@ -56,30 +60,58 @@ class CalendarSubscriber implements EventSubscriberInterface
      * @param CalendarEvent $calendar
      * @throws Exception
      */
-    public function onCalendarSetData(CalendarEvent $calendar)
-    {
-        /*$user = $this->security->getUser();
-        $workingDays = $this->workingDayRepository->findAllByUser($user->getId());
+    public function onCalendarSetData(CalendarEvent $calendar) {
+        $user = $this->security->getUser();
+        $workTimes = $this->workTimeRepository->findAllByUser($user->getId());
+        $tasks = [];
 
-        foreach ($workingDays as $workingDay) {
-            $plannedDay = new Event(
-                $workingDay->getIsTeleworked() ? 'Télétravail' : 'Présentiel',
-                new \DateTime($workingDay->getDate()->format('Y-m-d'))
-            );
+        $this->planTimes($calendar, $workTimes);
+        //$this->planTasks($calendar, $tasks);
+    }
 
-            $plannedDay->setOptions([
-                'backgroundColor' => 'red',
-                'borderColor' => 'red',
-            ]);
+    /**
+     * @param CalendarEvent $calendar
+     * @param array $workTimes
+     * @throws Exception
+     */
+    public function planTimes(CalendarEvent $calendar, array $workTimes) {
+        foreach ($workTimes as $workTime) {
+            $begin = new DateTime($workTime->getDateStart()->format('Y-m-d'));
+            $end   =  new DateTime($workTime->getDateEnd()->format('Y-m-d'));
 
-            $plannedDay->addOption(
-                'url',
-                $this->router->generate('working_day.edit', [
-                    'id' => $workingDay->getId(),
-                ])
-            );
+            $interval = DateInterval::createFromDateString('1 day');
+            $period = new DatePeriod($begin, $interval, $end);
 
-            $calendar->addEvent($plannedDay);
-        }*/
+            foreach ($period as $day) {
+                $plannedDay = new Event(
+                    $workTime->getIsTeleworked() ? 'Télétravail' : 'Présentiel',
+                    new DateTime($day->format('Y-m-d'))
+                );
+
+                $plannedDay->setOptions([
+                    'rendering' => 'background',
+                    'backgroundColor' => $workTime->getIsTeleworked() ? 'blue' : 'green'
+                ]);
+
+                $plannedDay->addOption(
+                    'url',
+                    $this->router->generate('workTime.edit', [
+                        'id' => $workTime->getId(),
+                    ])
+                );
+
+                $calendar->addEvent($plannedDay);
+            }
+        }
+    }
+
+    /**
+     * @param CalendarEvent $calendar
+     * @param array $tasks
+     */
+    private function planTasks(CalendarEvent $calendar, array $tasks) {
+        foreach ($tasks as $task) {
+
+        }
     }
 }

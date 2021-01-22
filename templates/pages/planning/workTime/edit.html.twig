@@ -5,6 +5,6 @@
 {% block body %}
     <h1>Editer une période</h1>
     {{ include('pages/planning/workTime/_form.html.twig', {'button_label': 'Update'}) }}
-    <a href="{{ path('planning.index') }}">Retour</a>
-    {{ include('pages/planning/workTime/_delete.html.twig') }}
+    <a href="{{ path('planning.index') }}" class="btn btn-secondary">Retour</a>
+    {{ include('pages/planning/workTime/_delete_form.html.twig') }}
 {% endblock %}
