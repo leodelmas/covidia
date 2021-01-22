@@ -26,8 +26,8 @@ class WorkingDayRepository extends ServiceEntityRepository
     public function findAllByUser($userId): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.user = 8')
-            //->setParameter('userid', $userId)
+            ->andWhere('p.user = :userid')
+            ->setParameter('userid', $userId)
             ->getQuery()
             ->getResult()
         ;

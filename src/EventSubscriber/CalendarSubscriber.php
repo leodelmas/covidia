@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
 use App\Repository\WorkingDayRepository;
 use CalendarBundle\CalendarEvents;
 use CalendarBundle\Entity\Event;
@@ -29,6 +30,11 @@ class CalendarSubscriber implements EventSubscriberInterface
     private $security;
 
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
      * CalendarSubscriber constructor.
      * @param WorkingDayRepository $workingDayRepository
      * @param UrlGeneratorInterface $router
@@ -52,7 +58,8 @@ class CalendarSubscriber implements EventSubscriberInterface
      */
     public function onCalendarSetData(CalendarEvent $calendar)
     {
-        $workingDays = $this->workingDayRepository->findAllByUser(8);
+        $user = $this->security->getUser();
+        $workingDays = $this->workingDayRepository->findAllByUser($user->getId());
 
         foreach ($workingDays as $workingDay) {
             $plannedDay = new Event(
