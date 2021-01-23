@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des tâches{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Gestion des tâches</h1>
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Commentaire</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.dateTimeStart ? task.dateTimeStart|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.dateTimeEnd ? task.dateTimeEnd|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.comment }}</td>
+                    <td>
+                        <a href="{{ path('task.edit', {'id': task.id}) }}" class="btn btn-secondary">Editer</a>
+                        {{ include('pages/planning/task/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucune tâche</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('task.new') }}" class="btn btn-primary">Créer</a>
+    </div>
+{% endblock %}

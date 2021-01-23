@@ -3,7 +3,8 @@
 {% block title %}Créer une période{% endblock %}
 
 {% block body %}
-    <h1>Créer une période</h1>
-    {{ include('pages/planning/workTime/_form.html.twig') }}
-    <a href="{{ path('planning.index') }}">Retour</a>
+    <div class="container">
+        <h1>Créer une période</h1>
+        {{ include('pages/planning/workTime/_form.html.twig') }}
+    </div>
 {% endblock %}

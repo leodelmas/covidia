@@ -1,4 +1,18 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        {{ form_row(form.dateStart) }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form_row(form.dateEnd) }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form_row(form.isTeleworked) }}
+    </div>
+</div>
+{{ form_rest(form) }}
+<div class="d-flex justify-content-between">
+    <a href="{{ path('planning.index') }}" class="btn btn-secondary">Retour</a>
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+</div>
 {{ form_end(form) }}

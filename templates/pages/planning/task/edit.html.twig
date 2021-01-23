@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editer une tâche{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Editer une tâche</h1>
+        {{ include('pages/planning/task/_form.html.twig', {'button_label': 'Editer'}) }}
+        {{ include('pages/planning/task/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

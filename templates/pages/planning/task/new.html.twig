@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une tâche{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Créer une tâche</h1>
+        {{ include('pages/planning/task/_form.html.twig') }}
+    </div>
+{% endblock %}

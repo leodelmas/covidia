@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/planning/workTime")
@@ -29,10 +30,12 @@ class WorkTimeController extends AbstractController {
     /**
      * @Route("/new", name="workTime.new", methods={"GET","POST"})
      * @param Request $request
+     * @param Security $security
      * @return Response
      */
-    public function new(Request $request): Response {
+    public function new(Request $request, Security $security): Response {
         $workTime = new WorkTime();
+        $workTime->setUser($security->getUser());
         $form = $this->createForm(WorkTimeType::class, $workTime);
         $form->handleRequest($request);
 

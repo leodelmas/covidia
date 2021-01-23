@@ -10,8 +10,8 @@
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-bs-toggle="dropdown" aria-expanded="false">Périodes</button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
-                    <li><a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a></li>
                     <li><a class="dropdown-item" href="{{ path('workTime.index') }}">Gérer</a></li>
+                    <li><a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a></li>
                 </ul>
             </div>
         </div>
@@ -19,8 +19,8 @@
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-bs-toggle="dropdown" aria-expanded="false">Tâches</button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
-                    <li><a class="dropdown-item" href="#">Créer</a></li>
-                    <li><a class="dropdown-item" href="#">Gérer</a></li>
+                    <li><a class="dropdown-item" href="{{ path('task.index') }}">Gérer</a></li>
+                    <li><a class="dropdown-item" href="{{ path('task.new') }}">Créer</a></li>
                 </ul>
             </div>
         </div>

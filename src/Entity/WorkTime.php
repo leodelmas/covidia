@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WorkTimeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @ORM\Entity(repositoryClass=WorkTimeRepository::class)

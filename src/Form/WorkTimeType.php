@@ -21,12 +21,7 @@ class WorkTimeType extends AbstractType
             ->add('dateEnd', DateType::class, [
                 'widget' => 'single_text'
             ])
-            ->add('isTeleworked')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'required' => true,
-                'choice_label' => 'email'
-            ]);
+            ->add('isTeleworked');
     }
 
     public function configureOptions(OptionsResolver $resolver)

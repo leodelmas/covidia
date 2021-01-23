@@ -2,29 +2,29 @@
 
 namespace App\Repository;
 
-use App\Entity\WorkTime;
+use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method WorkTime|null find($id, $lockMode = null, $lockVersion = null)
- * @method WorkTime|null findOneBy(array $criteria, array $orderBy = null)
- * @method WorkTime[]    findAll()
- * @method WorkTime[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Task|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Task|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Task[]    findAll()
+ * @method Task[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class WorkTimeRepository extends ServiceEntityRepository {
+class TaskRepository extends ServiceEntityRepository {
 
     /**
-     * WorkTimeRepository constructor.
+     * TaskRepository constructor.
      * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry) {
-        parent::__construct($registry, WorkTime::class);
+        parent::__construct($registry, Task::class);
     }
 
     /**
      * @param $userId
-     * @return WorkTime[]
+     * @return Task[]
      */
     public function findAllByUser($userId) {
         return $this->createQueryBuilder('p')

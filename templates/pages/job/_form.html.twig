@@ -5,5 +5,8 @@
     </div>
 </div>
 {{ form_rest(form) }}
-<button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+<div class="d-flex justify-content-between">
+    <a href="{{ path('job.index') }}" class="btn btn-secondary">Retour</a>
+    <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+</div>
 {{ form_end(form) }}
