@@ -19,8 +19,8 @@
             {% for task in tasks %}
                 <tr>
                     <td>{{ task.id }}</td>
-                    <td>{{ task.dateTimeStart ? task.dateTimeStart|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ task.dateTimeEnd ? task.dateTimeEnd|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.dateTimeStart|date('d/m/Y H:i') }}</td>
+                    <td>{{ task.dateTimeEnd|date('d/m/Y H:i') }}</td>
                     <td>{{ task.comment }}</td>
                     <td>
                         <a href="{{ path('task.edit', {'id': task.id}) }}" class="btn btn-secondary">Editer</a>
@@ -34,6 +34,9 @@
             {% endfor %}
             </tbody>
         </table>
-        <a href="{{ path('task.new') }}" class="btn btn-primary">Créer</a>
+        <div class="d-flex justify-content-between">
+            <a href="{{ path('planning.index') }}" class="btn btn-secondary">Retour</a>
+            <a href="{{ path('task.new') }}" class="btn btn-primary">Créer</a>
+        </div>
     </div>
 {% endblock %}

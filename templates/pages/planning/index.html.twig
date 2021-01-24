@@ -6,22 +6,38 @@
     <div class="container">
         <h1>Gestion du planning</h1>
         <div id="calendar-holder"></div>
-        <div class="btn-group">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-bs-toggle="dropdown" aria-expanded="false">Périodes</button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
-                    <li><a class="dropdown-item" href="{{ path('workTime.index') }}">Gérer</a></li>
-                    <li><a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a></li>
+        <div class="d-flex justify-content-between mt-3">
+            <div class="calendar-caption">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div style="width: 25px; height: 25px; background-color: #B7D8BA; display: inline-block;"></div>
+                        Présentiel
+                    </li>
+                    <li class="list-group-item">
+                        <div style="width: 25px; height: 25px; background-color: #B5BBFF; display: inline-block;"></div>
+                        Télétravail
+                    </li>
                 </ul>
             </div>
-        </div>
-        <div class="btn-group">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-bs-toggle="dropdown" aria-expanded="false">Tâches</button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
-                    <li><a class="dropdown-item" href="{{ path('task.index') }}">Gérer</a></li>
-                    <li><a class="dropdown-item" href="{{ path('task.new') }}">Créer</a></li>
-                </ul>
+            <div class="calendar-btn">
+                <div class="btn-group">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-bs-toggle="dropdown" aria-expanded="false">Périodes</button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
+                            <li><a class="dropdown-item" href="{{ path('workTime.index') }}">Gérer</a></li>
+                            <li><a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-bs-toggle="dropdown" aria-expanded="false">Tâches</button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
+                            <li><a class="dropdown-item" href="{{ path('task.index') }}">Gérer</a></li>
+                            <li><a class="dropdown-item" href="{{ path('task.new') }}">Créer</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -49,8 +65,15 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay',
                 },
+                buttonText: {
+                    today: 'Aujourd\'hui',
+                    month: 'Mois',
+                    week: 'Semaine',
+                    day: 'Jour'
+                },
                 plugins: [ 'dayGrid', 'timeGrid' ],
                 timeZone: 'UTC',
+                firstDay: 1,
             });
             calendar.render();
         });

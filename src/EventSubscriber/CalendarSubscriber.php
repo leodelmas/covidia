@@ -75,7 +75,7 @@ class CalendarSubscriber implements EventSubscriberInterface
         $tasks = $this->taskRepository->findAllByUser($user->getId());
 
         $this->planTimes($calendar, $workTimes);
-        //$this->planTasks($calendar, $tasks);
+        $this->planTasks($calendar, $tasks);
     }
 
     /**
@@ -121,21 +121,20 @@ class CalendarSubscriber implements EventSubscriberInterface
      */
     private function planTasks(CalendarEvent $calendar, array $tasks) {
         foreach ($tasks as $task) {
-
             $plannedTask = new Event(
-                'Tâche',
-                new DateTime($task->getDateTimeStart()->format('Y-m-d')),
-                new DateTime($task->getDateTimeEnd()->format('Y-m-d'))
+                strlen($task->getComment()) > 20 ? substr($task->getComment(), 0, 20) . '...' : $task->getComment(),
+                new DateTime($task->getDateTimeStart()->format('Y-m-d H:i')),
+                new DateTime($task->getDateTimeEnd()->format('Y-m-d H:i'))
             );
+
+            $plannedTask->addOption(
+                'url',
+                $this->router->generate('task.edit', [
+                    'id' => $task->getId(),
+                ])
+            );
+
+            $calendar->addEvent($plannedTask);
         }
-
-        $plannedTask->addOption(
-            'url',
-            $this->router->generate('task.edit', [
-                'id' => $task->getId(),
-            ])
-        );
-
-        $calendar->addEvent($plannedTask);
     }
 }

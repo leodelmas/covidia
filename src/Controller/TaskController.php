@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/planning/task")
@@ -20,8 +21,7 @@ class TaskController extends AbstractController
      * @param TaskRepository $taskRepository
      * @return Response
      */
-    public function index(TaskRepository $taskRepository): Response
-    {
+    public function index(TaskRepository $taskRepository): Response {
         return $this->render('pages/planning/task/index.html.twig', [
             'tasks' => $taskRepository->findAll(),
         ]);
@@ -32,9 +32,9 @@ class TaskController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
-    {
+    public function new(Request $request, Security $security): Response {
         $task = new Task();
+        $task->setUser($security->getUser());
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
@@ -58,8 +58,7 @@ class TaskController extends AbstractController
      * @param Task $task
      * @return Response
      */
-    public function edit(Request $request, Task $task): Response
-    {
+    public function edit(Request $request, Task $task): Response {
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
@@ -81,8 +80,7 @@ class TaskController extends AbstractController
      * @param Task $task
      * @return Response
      */
-    public function delete(Request $request, Task $task): Response
-    {
+    public function delete(Request $request, Task $task): Response {
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($task);
