@@ -40,6 +40,12 @@ class Task
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=WorkTime::class, inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $workTime;
+
     public function getId(): ?int {
         return $this->id;
     }
@@ -77,6 +83,18 @@ class Task
 
     public function setUser(?User $user): self {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getWorkTime(): ?WorkTime
+    {
+        return $this->workTime;
+    }
+
+    public function setWorkTime(?WorkTime $workTime): self
+    {
+        $this->workTime = $workTime;
+
         return $this;
     }
 }

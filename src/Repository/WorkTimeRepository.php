@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\WorkTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -32,5 +33,24 @@ class WorkTimeRepository extends ServiceEntityRepository {
             ->setParameter('userId', $userId)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param $userId
+     * @param $dateTimeStart
+     * @param $dateTimeEnd
+     * @return WorkTime
+     * @throws NonUniqueResultException
+     */
+    public function findRightWorkTimeForTask($userId, $dateTimeStart, $dateTimeEnd) {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.user = :userId')
+            ->andWhere('p.dateStart <= :dateTimeStart')
+            ->andWhere('p.dateEnd >= :dateTimeEnd')
+            ->setParameter('userId', $userId)
+            ->setParameter('dateTimeStart', $dateTimeStart->format('Y-m-d'))
+            ->setParameter('dateTimeEnd', $dateTimeEnd->format('Y-m-d'))
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
