@@ -74,7 +74,7 @@ class CalendarSubscriber implements EventSubscriberInterface
         $workTimes = $this->workTimeRepository->findAllByUser($user->getId());
         $tasks = $this->taskRepository->findAllByUser($user->getId());
 
-        $this->planTimes($calendar, $workTimes);
+        $this->planWorkTimes($calendar, $workTimes);
         $this->planTasks($calendar, $tasks);
     }
 
@@ -83,7 +83,7 @@ class CalendarSubscriber implements EventSubscriberInterface
      * @param WorkTime[] $workTimes
      * @throws Exception
      */
-    public function planTimes(CalendarEvent $calendar, array $workTimes) {
+    public function planWorkTimes(CalendarEvent $calendar, array $workTimes) {
         foreach ($workTimes as $workTime) {
             $begin = new DateTime($workTime->getDateStart()->format('Y-m-d'));
             $end   =  new DateTime($workTime->getDateEnd()->modify('+1 day')->format('Y-m-d'));
@@ -101,13 +101,6 @@ class CalendarSubscriber implements EventSubscriberInterface
                     'rendering' => 'background',
                     'backgroundColor' => $workTime->getIsTeleworked() ? 'blue' : 'green'
                 ]);
-
-                $plannedDay->addOption(
-                    'url',
-                    $this->router->generate('workTime.edit', [
-                        'id' => $workTime->getId(),
-                    ])
-                );
 
                 $calendar->addEvent($plannedDay);
             }

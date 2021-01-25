@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\WorkTime;
 use App\Form\WorkTimeType;
 use App\Repository\WorkTimeRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,19 +32,28 @@ class WorkTimeController extends AbstractController {
      * @Route("/new", name="workTime.new", methods={"GET","POST"})
      * @param Request $request
      * @param Security $security
+     * @param WorkTimeRepository $workTimeRepository
      * @return Response
+     * @throws NonUniqueResultException
      */
-    public function new(Request $request, Security $security): Response {
+    public function new(Request $request, Security $security, WorkTimeRepository $workTimeRepository): Response {
         $workTime = new WorkTime();
-        $workTime->setUser($security->getUser());
         $form = $this->createForm(WorkTimeType::class, $workTime);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($workTime);
-            $entityManager->flush();
-
+            $user = $security->getUser();
+            $workTimeAlreadyExist = $workTimeRepository->findAlreadyPlannedWorkTime($user->getId(), $workTime->getDateStart(), $workTime->getDateEnd());
+            if($workTimeAlreadyExist !== null) {
+                $this->addFlash('danger', 'Impossible de superposer deux périodes.');
+                return $this->redirectToRoute('workTime.index');
+            }
+            else {
+                $workTime->setUser($user);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($workTime);
+                $entityManager->flush();
+            }
             return $this->redirectToRoute('planning.index');
         }
 

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\WorkTime;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,7 +28,7 @@ class WorkTimeRepository extends ServiceEntityRepository {
      * @param $userId
      * @return WorkTime[]
      */
-    public function findAllByUser($userId) {
+    public function findAllByUser($userId): array {
         return $this->createQueryBuilder('p')
             ->andWhere('p.user = :userId')
             ->setParameter('userId', $userId)
@@ -39,10 +40,10 @@ class WorkTimeRepository extends ServiceEntityRepository {
      * @param $userId
      * @param $dateTimeStart
      * @param $dateTimeEnd
-     * @return WorkTime
+     * @return WorkTime|null
      * @throws NonUniqueResultException
      */
-    public function findRightWorkTimeForTask($userId, $dateTimeStart, $dateTimeEnd) {
+    public function findRightWorkTimeForTask(int $userId, DateTime $dateTimeStart, DateTime $dateTimeEnd): ?WorkTime {
         return $this->createQueryBuilder('p')
             ->andWhere('p.user = :userId')
             ->andWhere('p.dateStart <= :dateTimeStart')
@@ -50,6 +51,28 @@ class WorkTimeRepository extends ServiceEntityRepository {
             ->setParameter('userId', $userId)
             ->setParameter('dateTimeStart', $dateTimeStart->format('Y-m-d'))
             ->setParameter('dateTimeEnd', $dateTimeEnd->format('Y-m-d'))
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
+    /**
+     * @param $userId
+     * @param $dateStart
+     * @param $dateEnd
+     * @return WorkTime|null
+     * @throws NonUniqueResultException
+     */
+    public function findAlreadyPlannedWorkTime($userId, $dateStart, $dateEnd): ?WorkTime {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.user = :userId')
+            ->andWhere(':dateStart BETWEEN p.dateStart AND p.dateEnd')
+            ->orWhere(':dateEnd BETWEEN p.dateStart AND p.dateEnd')
+            ->orWhere('p.dateStart BETWEEN :dateStart AND :dateEnd')
+            ->orWhere('p.dateEnd BETWEEN :dateStart AND :dateEnd')
+            ->setParameter('userId', $userId)
+            ->setParameter('dateStart', $dateStart->format('Y-m-d'))
+            ->setParameter('dateEnd', $dateEnd->format('Y-m-d'))
             ->getQuery()
             ->getOneOrNullResult();
     }
