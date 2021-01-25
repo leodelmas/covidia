@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Job;
+use App\Entity\Sos;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class JobType extends AbstractType
+class SosType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,7 +19,7 @@ class JobType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Job::class,
+            'data_class' => Sos::class,
         ]);
     }
 }
