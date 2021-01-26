@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=WorkTimeRepository::class)
@@ -22,11 +23,13 @@ class WorkTime
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Expression("value <= this.getDateEnd()")
      */
     private $dateStart;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Expression("value >= this.getDateStart()")
      */
     private $dateEnd;
 

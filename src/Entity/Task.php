@@ -20,11 +20,13 @@ class Task
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Expression("value < this.getDateTimeEnd()")
      */
     private $dateTimeStart;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Expression("value > this.getDateTimeStart()")
      */
     private $dateTimeEnd;
 
