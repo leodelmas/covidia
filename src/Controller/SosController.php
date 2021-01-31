@@ -18,11 +18,13 @@ class SosController extends AbstractController
     public function index(Request $request, Security $security): Response
     {
         $sos = new Sos();
+        $sos->setEmail(0);
         $sos->setUser($security->getUser());
         $form = $this->createForm(SosType::class, $sos);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+
             $this->addFlash('success', 'Votre email a bien été envoyé');
         }
 

@@ -1,0 +1,15 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-md-3 mb-3">
+        {{ form_row(form.email) }}
+    </div>
+    <div class="col-md-3 mb-3">
+        {{ form_row(form.sujet) }}
+    </div>
+</div>
+{{ form_widget(form) }}
+<div class="d-flex justify-content-between">
+    <a href="{{ path('home') }}" class="btn btn-secondary">Retour</a>
+    <button class="btn btn-primary">Envoyer</button>
+</div>
+{{ form_end(form) }}
