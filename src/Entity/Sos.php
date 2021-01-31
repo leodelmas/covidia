@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Sos
 {
     const TYPE_EMAIL = [
@@ -11,6 +13,7 @@ class Sos
 
     /**
      * @var string
+     * @Assert\Length(min=5, max=50)
      */
     private $sujet;
 

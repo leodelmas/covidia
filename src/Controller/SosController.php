@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sos;
 use App\Form\SosType;
+use App\Notification\SosNotification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class SosController extends AbstractController
     /**
      * @Route("/sos", name="sos.index")
      */
-    public function index(Request $request, Security $security): Response
+    public function index(Request $request, Security $security, SosNotification $notification): Response
     {
         $sos = new Sos();
         $sos->setEmail(0);
@@ -24,7 +25,7 @@ class SosController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-
+            $notification->notify($sos);
             $this->addFlash('success', 'Votre email a bien été envoyé');
         }
 
