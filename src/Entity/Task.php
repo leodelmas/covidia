@@ -88,15 +88,12 @@ class Task
         return $this;
     }
 
-    public function getWorkTime(): ?WorkTime
-    {
+    public function getWorkTime(): ?WorkTime {
         return $this->workTime;
     }
 
-    public function setWorkTime(?WorkTime $workTime): self
-    {
+    public function setWorkTime(?WorkTime $workTime): self {
         $this->workTime = $workTime;
-
         return $this;
     }
 }

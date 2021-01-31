@@ -54,6 +54,7 @@ class TaskController extends AbstractController
             $task->setUser($user);
             $entityManager->persist($task);
             $entityManager->flush();
+            $this->addFlash('success', 'Tâche créée avec succès !');
             return $this->redirectToRoute('task.index');
         }
 
@@ -85,6 +86,7 @@ class TaskController extends AbstractController
             }
             $task->setWorkTime($workTime);
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Tâche modifiée avec succès !');
             return $this->redirectToRoute('task.index');
         }
 
@@ -105,8 +107,8 @@ class TaskController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($task);
             $entityManager->flush();
+            $this->addFlash('success', 'Tâche supprimée avec succès !');
         }
-
         return $this->redirectToRoute('task.index');
     }
 }

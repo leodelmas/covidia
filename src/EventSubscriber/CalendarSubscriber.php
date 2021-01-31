@@ -41,11 +41,6 @@ class CalendarSubscriber implements EventSubscriberInterface
     private $security;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
      * CalendarSubscriber constructor.
      * @param WorkTimeRepository $workTimeRepository
      * @param TaskRepository $taskRepository

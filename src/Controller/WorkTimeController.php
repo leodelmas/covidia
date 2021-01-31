@@ -53,6 +53,7 @@ class WorkTimeController extends AbstractController {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($workTime);
                 $entityManager->flush();
+                $this->addFlash('success', 'Période créée avec succès !');
             }
             return $this->redirectToRoute('planning.index');
         }
@@ -67,15 +68,24 @@ class WorkTimeController extends AbstractController {
      * @Route("/{id}/edit", name="workTime.edit", methods={"GET","POST"})
      * @param Request $request
      * @param WorkTime $workTime
+     * @param Security $security
+     * @param WorkTimeRepository $workTimeRepository
      * @return Response
+     * @throws NonUniqueResultException
      */
-    public function edit(Request $request, WorkTime $workTime): Response {
+    public function edit(Request $request, WorkTime $workTime, Security $security, WorkTimeRepository $workTimeRepository): Response {
         $form = $this->createForm(WorkTimeType::class, $workTime);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $user = $security->getUser();
+            $workTimeAlreadyExist = $workTimeRepository->findAlreadyPlannedWorkTime($user->getId(), $workTime->getDateStart(), $workTime->getDateEnd());
+            if($workTimeAlreadyExist !== null) {
+                $this->addFlash('danger', 'Impossible de superposer deux périodes.');
+                return $this->redirectToRoute('workTime.index');
+            }
+            $this->addFlash('success', 'Période modifiée avec succès !');
             return $this->redirectToRoute('planning.index');
         }
 
@@ -96,6 +106,7 @@ class WorkTimeController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($workTime);
             $entityManager->flush();
+            $this->addFlash('success', 'Période supprimée avec succès !');
         }
 
         return $this->redirectToRoute('planning.index');

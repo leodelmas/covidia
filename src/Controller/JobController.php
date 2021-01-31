@@ -42,7 +42,7 @@ class JobController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($job);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Emploi créé avec succès !');
             return $this->redirectToRoute('job.index');
         }
 
@@ -65,7 +65,7 @@ class JobController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('success', 'Emploi modifié avec succès !');
             return $this->redirectToRoute('job.index');
         }
 
@@ -87,6 +87,7 @@ class JobController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($job);
             $entityManager->flush();
+            $this->addFlash('success', 'Emploi supprimé avec succès !');
         }
 
         return $this->redirectToRoute('job.index');
