@@ -22,6 +22,7 @@ class TaskCategoryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TaskCategory::class,
+            'translation_domain' => 'TaskCategory.forms',
         ]);
     }
 }
