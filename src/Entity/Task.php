@@ -48,6 +48,12 @@ class Task
      */
     private $workTime;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaskCategory::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $taskCategory;
+
     public function getId(): ?int {
         return $this->id;
     }
@@ -94,6 +100,18 @@ class Task
 
     public function setWorkTime(?WorkTime $workTime): self {
         $this->workTime = $workTime;
+        return $this;
+    }
+
+    public function getTaskCategory(): ?TaskCategory
+    {
+        return $this->taskCategory;
+    }
+
+    public function setTaskCategory(?TaskCategory $taskCategory): self
+    {
+        $this->taskCategory = $taskCategory;
+
         return $this;
     }
 }

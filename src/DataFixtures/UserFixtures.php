@@ -3,8 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\Job;
+use App\Entity\Task;
 use App\Entity\TaskCategory;
 use App\Entity\User;
+use App\Entity\WorkTime;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -78,6 +81,26 @@ class UserFixtures extends Fixture
             ->setIsRemote(true)
             ->setIsPhysical(true);
         $manager->persist($typeTache3);
+        $manager->flush();
+
+        $worktime = new WorkTime();
+        $worktime 
+            ->setDateStart(new DateTime('2021-02-01'))
+            ->setDateEnd(new DateTime('2021-02-05'))
+            ->setIsTeleworked(true)
+            ->setUser($user);
+        $manager->persist($worktime);
+        $manager->flush();
+
+        $task = new Task();
+        $task 
+            ->setDateTimeStart(new DateTime('2021-02-01 08:30'))
+            ->setDateTimeEnd(new DateTime('2021-02-01 10:30'))
+            ->setWorkTime($worktime)
+            ->setUser($user)
+            ->setTaskCategory($typeTache2)
+            ->setComment("Je suis le test de l'ajout d'une catégorie");
+        $manager->persist($task);
         $manager->flush();
     }
 }

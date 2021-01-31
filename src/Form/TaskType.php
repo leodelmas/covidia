@@ -3,10 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Task;
+use App\Entity\TaskCategory;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class TaskType extends AbstractType
 {
@@ -18,6 +20,11 @@ class TaskType extends AbstractType
             ])
             ->add('dateTimeEnd', DateTimeType::class, [
                 'widget' => 'single_text'
+            ])
+            ->add('taskCategory', EntityType::class, [
+                'class' => TaskCategory::class,
+                'required' => true,
+                'choice_label' => 'name'
             ])
             ->add('comment');
     }
