@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Job;
+use App\Entity\TaskCategory;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -53,6 +54,30 @@ class UserFixtures extends Fixture
             ->setJob($job);
 
         $manager->persist($user);
+        $manager->flush();
+
+        $typeTache = new TaskCategory();
+        $typeTache
+            ->setName('Commercial')
+            ->setIsRemote(false)
+            ->setIsPhysical(true);
+        $manager->persist($typeTache);
+        $manager->flush();
+
+        $typeTache2 = new TaskCategory();
+        $typeTache2
+            ->setName('Réunion externe en vidéoconférence')
+            ->setIsRemote(true)
+            ->setIsPhysical(false);
+        $manager->persist($typeTache2);
+        $manager->flush();
+
+        $typeTache3 = new TaskCategory();
+        $typeTache3
+            ->setName('Maintenance')
+            ->setIsRemote(true)
+            ->setIsPhysical(true);
+        $manager->persist($typeTache3);
         $manager->flush();
     }
 }

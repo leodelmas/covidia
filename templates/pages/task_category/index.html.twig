@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Type de Tâches{% endblock %}
+
+{% block body %}
+<div class="container">
+ <h1>Gestion des Type de Tâches</h1>
+     {{ include('pages/_partials/messages.html.twig') }}
+    <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>IsRemote</th>
+                <th>IsPhysical</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+        {% for task_category in task_categories %}
+            <tr>
+                <td>{{ task_category.id }}</td>
+                <td>{{ task_category.name }}</td>
+                <td>{{ task_category.isRemote ? 'Yes' : 'No' }}</td>
+                <td>{{ task_category.isPhysical ? 'Yes' : 'No' }}</td>
+               <td>
+                        <a href="{{ path('task_category.edit', {'id': task_category.id}) }}" class="btn btn-secondary">Editer</a>
+                        <form method="POST" action="{{ path('task_category.delete', {id: task_category.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer ce type de tâche ?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task_category.id) }}">
+                            <button class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun type de têche</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('task_category.new') }}" class="btn btn-primary">Créer</a>
+</div>
+   
+{% endblock %}

@@ -11,22 +11,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/task/category")
+ * @Route("/admin/task_category")
  */
 class TaskCategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="task_category_index", methods={"GET"})
+     * @Route("/", name="task_category.index", methods={"GET"})
      */
     public function index(TaskCategoryRepository $taskCategoryRepository): Response
     {
-        return $this->render('task_category/index.html.twig', [
+        return $this->render('pages/task_category/index.html.twig', [
             'task_categories' => $taskCategoryRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="task_category_new", methods={"GET","POST"})
+     * @Route("/new", name="task_category.new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -39,27 +39,17 @@ class TaskCategoryController extends AbstractController
             $entityManager->persist($taskCategory);
             $entityManager->flush();
 
-            return $this->redirectToRoute('task_category_index');
+            return $this->redirectToRoute('task_category.index');
         }
 
-        return $this->render('task_category/new.html.twig', [
+        return $this->render('pages/task_category/new.html.twig', [
             'task_category' => $taskCategory,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="task_category_show", methods={"GET"})
-     */
-    public function show(TaskCategory $taskCategory): Response
-    {
-        return $this->render('task_category/show.html.twig', [
-            'task_category' => $taskCategory,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="task_category_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="task_category.edit", methods={"GET","POST"})
      */
     public function edit(Request $request, TaskCategory $taskCategory): Response
     {
@@ -69,17 +59,17 @@ class TaskCategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('task_category_index');
+            return $this->redirectToRoute('task_category.index');
         }
 
-        return $this->render('task_category/edit.html.twig', [
+        return $this->render('pages/task_category/edit.html.twig', [
             'task_category' => $taskCategory,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="task_category_delete", methods={"DELETE"})
+     * @Route("/{id}", name="task_category.delete", methods={"DELETE"})
      */
     public function delete(Request $request, TaskCategory $taskCategory): Response
     {
@@ -89,6 +79,6 @@ class TaskCategoryController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('task_category_index');
+        return $this->redirectToRoute('task_category.index');
     }
 }

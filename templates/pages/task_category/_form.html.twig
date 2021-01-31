@@ -1,0 +1,18 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-md-4 mb-3">
+        {{ form_row(form.name) }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form_row(form.isRemote) }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form_row(form.isPhysical) }}
+    </div>
+</div>
+{{ form_rest(form) }}
+<div class="d-flex justify-content-between">
+    <a href="{{ path('task_category.index') }}" class="btn btn-secondary">Retour</a>
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+</div>
+{{ form_end(form) }}
