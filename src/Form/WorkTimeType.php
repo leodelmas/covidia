@@ -28,6 +28,7 @@ class WorkTimeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => WorkTime::class,
+            'translation_domain' => 'WorkTime.forms',
         ]);
     }
 }

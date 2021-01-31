@@ -26,6 +26,7 @@ class TaskType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
+            'translation_domain' => 'Task.forms',
         ]);
     }
 }
