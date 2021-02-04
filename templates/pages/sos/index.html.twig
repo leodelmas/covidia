@@ -5,11 +5,7 @@
 {% block body %}
     <div class="container">
         <h1>Envoyer un SOS au psychologue</h1>
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
+        {{ include('pages/_partials/messages.html.twig') }}
         {{ include('pages/sos/_form.html.twig', {form: form}) }}
     </div>
 {% endblock %}

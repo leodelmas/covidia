@@ -4,23 +4,13 @@ namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Sos
-{
-    const TYPE_EMAIL = [
-        0 => "Email1",
-        1 => "Email2"
-    ];
+class Sos {
 
     /**
      * @var string
      * @Assert\Length(min=5, max=50)
      */
-    private $sujet;
-
-    /**
-     * @var integer
-     */
-    private $email;
+    private $message;
 
     /**
      * @var User
@@ -30,52 +20,23 @@ class Sos
     /**
      * @return string
      */
-    public function getSujet(): string
-    {
-        return $this->sujet;
+    public function getMessage(): string {
+        return $this->message;
     }
 
     /**
-     * @param string $sujet
+     * @param string $message
      * @return Sos
      */
-    public function setSujet(string $sujet): Sos
-    {
-        $this->sujet = $sujet;
+    public function setMessage(string $message): Sos {
+        $this->message = $message;
         return $this;
     }
-
-    /**
-     * @return integer
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param integer $email
-     * @return Sos
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmailType(): string
-    {
-        return self::TYPE_EMAIL[$this->email];
-    }
-
+    
     /**
      * @return User
      */
-    public function getUser(): User
-    {
+    public function getUser(): User {
         return $this->user;
     }
 
@@ -83,8 +44,7 @@ class Sos
      * @param User $user
      * @return Sos
      */
-    public function setUser(User $user): Sos
-    {
+    public function setUser(User $user): Sos {
         $this->user = $user;
         return $this;
     }
