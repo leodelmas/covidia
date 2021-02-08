@@ -21,11 +21,12 @@ class TaskController extends AbstractController
     /**
      * @Route("/", name="task.index", methods={"GET"})
      * @param TaskRepository $taskRepository
+     * @param Security $security
      * @return Response
      */
-    public function index(TaskRepository $taskRepository): Response {
+    public function index(TaskRepository $taskRepository, Security $security): Response {
         return $this->render('pages/planning/task/index.html.twig', [
-            'tasks' => $taskRepository->findAll(),
+            'tasks' => $taskRepository->findAllByUser($security->getUser()->getId()),
         ]);
     }
 

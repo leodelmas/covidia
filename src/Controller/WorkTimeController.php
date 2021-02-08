@@ -20,11 +20,12 @@ class WorkTimeController extends AbstractController {
     /**
      * @Route("/", name="workTime.index", methods={"GET"})
      * @param WorkTimeRepository $workTimeRepository
+     * @param Security $security
      * @return Response
      */
-    public function index(WorkTimeRepository $workTimeRepository): Response {
+    public function index(WorkTimeRepository $workTimeRepository, Security $security): Response {
         return $this->render('pages/planning/workTime/index.html.twig', [
-            'workTimes' => $workTimeRepository->findAll(),
+            'workTimes' => $workTimeRepository->findAllByUser($security->getUser()->getId()),
         ]);
     }
 

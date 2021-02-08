@@ -1,19 +1,15 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.scss';
+// Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'flatpickr/dist/flatpickr.min.css';
+import './styles/app.scss';
 
-// start the Stimulus application
-import './bootstrap';
+// Dependancies
 import 'jquery';
 import 'bootstrap';
-import '@fullcalendar/core';
+/*import '@fullcalendar/core';
 import '@fullcalendar/interaction';
 import '@fullcalendar/daygrid';
-import '@fullcalendar/timegrid';
+import '@fullcalendar/timegrid';*/
+
+// Scripts
+import './scripts/global';
