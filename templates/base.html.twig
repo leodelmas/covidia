@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Covidia - {% block title %}{% endblock %}</title>
-    <link rel="icon" href="favicon.ico"/>
+    <link rel="icon" href="/favicon.ico"/>
     {% block stylesheets %}
-        <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.css" rel="stylesheet">
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
@@ -48,10 +45,6 @@
 </nav>
 {% block body %}{% endblock %}
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
     {{ encore_entry_script_tags('app') }}
 {% endblock %}
 </body>

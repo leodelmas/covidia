@@ -9,3 +9,11 @@ flatpickr('input[type=datetime-local]', {
     dateFormat: "Y-m-d H:i:ss",
     locale: French
 });
+
+flatpickr('input[type=date]', {
+    allowInput: true,
+    altInput: true,
+    altFormat: "d/m/Y",
+    dateFormat: "Y-m-d",
+    locale: French
+});
