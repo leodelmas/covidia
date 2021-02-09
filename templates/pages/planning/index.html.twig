@@ -5,6 +5,7 @@
 {% block body %}
     <div class="container">
         <h1>Gestion du planning</h1>
+        {{ include('pages/planning/_search_form.html.twig') }}
         <div id="calendar-holder" data-src-url="{{ path('fc_load_events') }}"></div>
         <div class="d-flex justify-content-between mt-3">
             <div class="calendar-caption">

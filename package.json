@@ -25,6 +25,7 @@
         "flatpickr": "^4.6.9",
         "jquery": "^3.5.1",
         "popper.js": "^1.16.1",
-        "sass-loader": "^11.0.0"
+        "sass-loader": "^11.0.0",
+        "select2": "^4.1.0-rc.0"
     }
 }
