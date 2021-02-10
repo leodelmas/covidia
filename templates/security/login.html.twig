@@ -1,24 +1,24 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
-{% block title 'Se connecter' %}
+{% block title %}Connexion{% endblock %}
 
- {% block body %}
+{% block body %}
     <div class="container mt-4">
-        {% if error %}
-            <div class="alert alert-danger">
-            {{ error.messageKey | trans(error.messagedata, 'security') }}
+        <h1>Connexion</h1>
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <div class="from-group mb-3">
+                <label for="email">E-mail</label>
+                <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control">
             </div>
-        {% endif %}
-        <form action="{{ path('login')}}" method="post" >
-            <div class="from-group">
-                <label for="email">Nom d'utilisateur</label>
-                <input type="text" id="email" name="_username" class="form-control" value="{{ last_username }}">
-            </div>
-            <div class="from-group">
+            <div class="from-group mb-3">
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="_password" class="form-control">
+                <input type="password" name="password" id="password" class="form-control">
             </div>
-            <button type="submit" class="btn btn-primary">Se connecter</button>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <button class="btn btn-primary" type="submit">Se connecter</button>
         </form>
-     </div>
- {% endblock %}
+    </div>
+{% endblock %}
