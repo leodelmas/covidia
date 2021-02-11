@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PlanningSearch {
 
     private $taskCategories;
@@ -11,12 +13,14 @@ class PlanningSearch {
     /**
      * PlanningSearch constructor.
      */
-    public function __construct() {}
+    public function __construct() {
+        $this->taskCategories = new ArrayCollection();
+    }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
-    public function getTaskCategories() {
+    public function getTaskCategories(): ArrayCollection {
         return $this->taskCategories;
     }
 

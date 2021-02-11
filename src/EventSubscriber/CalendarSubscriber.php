@@ -2,9 +2,10 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\PlanningSearch;
 use App\Entity\Task;
-use App\Entity\User;
 use App\Entity\WorkTime;
+use App\Form\PlanningSearchType;
 use App\Repository\TaskRepository;
 use App\Repository\WorkTimeRepository;
 use CalendarBundle\CalendarEvents;
@@ -15,29 +16,15 @@ use DatePeriod;
 use DateTime;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 
-class CalendarSubscriber implements EventSubscriberInterface
-{
-    /**
-     * @var WorkTimeRepository
-     */
+class CalendarSubscriber implements EventSubscriberInterface {
+
     private $workTimeRepository;
-
-    /**
-     * @var TaskRepository
-     */
     private $taskRepository;
-
-    /**
-     * @var UrlGeneratorInterface
-     */
     private $router;
-
-    /**
-     * @var Security
-     */
     private $security;
 
     /**

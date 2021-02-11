@@ -2,10 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\PlanningSearch;
 use App\Entity\WorkTime;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,11 +31,30 @@ class WorkTimeRepository extends ServiceEntityRepository {
      * @return WorkTime[]
      */
     public function findAllByUser($userId): array {
+        return $this->findAllByUserQuery($userId)->getQuery()->getResult();
+    }
+
+    /**
+     * @param $userId
+     * @return QueryBuilder
+     */
+    public function findAllByUserQuery($userId): QueryBuilder {
         return $this->createQueryBuilder('p')
             ->andWhere('p.user = :userId')
-            ->setParameter('userId', $userId)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('userId', $userId);
+    }
+
+    /**
+     * @param $userId
+     * @param PlanningSearch $search
+     * @return WorkTime[]
+     */
+    public function findAllFiltered(int $userId, PlanningSearch $search): array {
+        $query = $this->findAllByUserQuery($userId);
+
+        //TODO
+
+        return $query->getQuery()->getResult();
     }
 
     /**
