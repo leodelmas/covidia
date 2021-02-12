@@ -13,6 +13,7 @@
                 <th>Nom</th>
                 <th>En Télétravail</th>
                 <th>En Présentiel</th>
+                <th>Couleur</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -23,6 +24,9 @@
                 <td>{{ task_category.name }}</td>
                 <td>{{ task_category.isRemote ? 'Oui' : 'Non' }}</td>
                 <td>{{ task_category.isPhysical ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="width: 25px; height: 25px; background-color: {{ task_category.color }}; display: inline-block;"></div>
+                </td>
                <td>
                         <a href="{{ path('task_category.edit', {'id': task_category.id}) }}" class="btn btn-secondary">Editer</a>
                         <form method="POST" action="{{ path('task_category.delete', {id: task_category.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer ce type de tâche ?')">

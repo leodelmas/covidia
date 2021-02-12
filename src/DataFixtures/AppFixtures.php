@@ -12,7 +12,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture
+class AppFixtures extends Fixture
 {
     private $passwordEncoder;
 
@@ -63,7 +63,8 @@ class UserFixtures extends Fixture
         $typeTache
             ->setName('Commercial')
             ->setIsRemote(false)
-            ->setIsPhysical(true);
+            ->setIsPhysical(true)
+            ->setColor('#F7AF00');
         $manager->persist($typeTache);
         $manager->flush();
 
@@ -71,7 +72,8 @@ class UserFixtures extends Fixture
         $typeTache2
             ->setName('Réunion externe en vidéoconférence')
             ->setIsRemote(true)
-            ->setIsPhysical(false);
+            ->setIsPhysical(false)
+            ->setColor('#748E54');
         $manager->persist($typeTache2);
         $manager->flush();
 
@@ -79,7 +81,8 @@ class UserFixtures extends Fixture
         $typeTache3
             ->setName('Maintenance')
             ->setIsRemote(true)
-            ->setIsPhysical(true);
+            ->setIsPhysical(true)
+            ->setColor('#DECAF1');
         $manager->persist($typeTache3);
         $manager->flush();
 

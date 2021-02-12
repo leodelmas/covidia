@@ -52,15 +52,17 @@ class TaskController extends AbstractController
                 return $this->redirectToRoute('task.index');
             }
             $task->setWorkTime($workTime);
-            if($task->getTaskCategory()->getIsRemote() && !$workTime->getIsTeleworked() || $task->getTaskCategory()->getIsPhysical() && $workTime->getIsTeleworked()){
+            if($task->getTaskCategory()->getIsPhysical() && $task->getTaskCategory()->getIsRemote() || $task->getTaskCategory()->getIsRemote() && $workTime->getIsTeleworked() || $task->getTaskCategory()->getIsPhysical() && !$workTime->getIsTeleworked()) {
+                $task->setUser($user);
+                $entityManager->persist($task);
+                $entityManager->flush();
+                $this->addFlash('success', 'Tâche créée avec succès !');
+                return $this->redirectToRoute('task.index');
+            }
+            else {
                 $this->addFlash('danger', 'La catégorie de tâche est invalide pour la période séléctionnée.');
                 return $this->redirectToRoute('task.index');
             }
-            $task->setUser($user);
-            $entityManager->persist($task);
-            $entityManager->flush();
-            $this->addFlash('success', 'Tâche créée avec succès !');
-            return $this->redirectToRoute('task.index');
         }
 
         return $this->render('pages/planning/task/new.html.twig', [
@@ -90,13 +92,15 @@ class TaskController extends AbstractController
                 return $this->redirectToRoute('task.index');
             }
             $task->setWorkTime($workTime);
-            if($task->getTaskCategory()->getIsRemote() && !$workTime->getIsTeleworked() || $task->getTaskCategory()->getIsPhysical() && $workTime->getIsTeleworked()){
+            if($task->getTaskCategory()->getIsPhysical() && $task->getTaskCategory()->getIsRemote() || $task->getTaskCategory()->getIsRemote() && $workTime->getIsTeleworked() || $task->getTaskCategory()->getIsPhysical() && !$workTime->getIsTeleworked()) {
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'Tâche modifiée avec succès !');
+                return $this->redirectToRoute('task.index');
+            }
+            else {
                 $this->addFlash('danger', 'La catégorie de tâche est invalide pour la période séléctionnée.');
                 return $this->redirectToRoute('task.index');
             }
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Tâche modifiée avec succès !');
-            return $this->redirectToRoute('task.index');
         }
 
         return $this->render('pages/planning/task/edit.html.twig', [

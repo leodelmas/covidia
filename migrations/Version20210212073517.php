@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210204164208 extends AbstractMigration
+final class Version20210212073517 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20210204164208 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE job (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE task (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, work_time_id INT NOT NULL, task_category_id INT NOT NULL, date_time_start DATETIME NOT NULL, date_time_end DATETIME NOT NULL, comment LONGTEXT NOT NULL, INDEX IDX_527EDB25A76ED395 (user_id), INDEX IDX_527EDB258B216519 (work_time_id), INDEX IDX_527EDB25543330D0 (task_category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE task_category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, is_remote TINYINT(1) NOT NULL, is_physical TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE task_category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, is_remote TINYINT(1) NOT NULL, is_physical TINYINT(1) NOT NULL, color VARCHAR(7) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, job_id INT NOT NULL, firstname VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, birth_date DATE NOT NULL, hiring_date DATE NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(10) NOT NULL, is_executive TINYINT(1) NOT NULL, is_admin TINYINT(1) NOT NULL, INDEX IDX_8D93D649BE04EA9 (job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE work_time (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, date_start DATE NOT NULL, date_end DATE NOT NULL, is_teleworked TINYINT(1) NOT NULL, INDEX IDX_9657297DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE task ADD CONSTRAINT FK_527EDB25A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');

@@ -102,10 +102,14 @@ class CalendarSubscriber implements EventSubscriberInterface {
                 new DateTime($task->getDateTimeEnd()->format('Y-m-d H:i'))
             );
 
+            $plannedTask->setOptions([
+                'borderColor' => $task->getTaskCategory()->getColor(),
+                'backgroundColor' => $task->getTaskCategory()->getColor()
+            ]);
+
             $plannedTask->addOption(
-                'url',
-                $this->router->generate('task.edit', [
-                    'id' => $task->getId(),
+                'url', $this->router->generate('task.edit', [
+                    'id' => $task->getId()
                 ])
             );
 

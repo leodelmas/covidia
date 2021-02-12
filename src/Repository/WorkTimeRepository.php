@@ -65,11 +65,10 @@ class WorkTimeRepository extends ServiceEntityRepository {
      * @throws NonUniqueResultException
      */
     public function findRightWorkTimeForTask(int $userId, DateTime $dateTimeStart, DateTime $dateTimeEnd): ?WorkTime {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.user = :userId')
+        $query = $this->findAllByUserQuery($userId);
+        return $query
             ->andWhere('p.dateStart <= :dateTimeStart')
             ->andWhere('p.dateEnd >= :dateTimeEnd')
-            ->setParameter('userId', $userId)
             ->setParameter('dateTimeStart', $dateTimeStart->format('Y-m-d'))
             ->setParameter('dateTimeEnd', $dateTimeEnd->format('Y-m-d'))
             ->getQuery()
@@ -85,13 +84,12 @@ class WorkTimeRepository extends ServiceEntityRepository {
      * @throws NonUniqueResultException
      */
     public function findAlreadyPlannedWorkTime($userId, $dateStart, $dateEnd): ?WorkTime {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.user = :userId')
+        $query = $this->findAllByUserQuery($userId);
+        return $query
             ->andWhere(':dateStart BETWEEN p.dateStart AND p.dateEnd')
             ->orWhere(':dateEnd BETWEEN p.dateStart AND p.dateEnd')
             ->orWhere('p.dateStart BETWEEN :dateStart AND :dateEnd')
             ->orWhere('p.dateEnd BETWEEN :dateStart AND :dateEnd')
-            ->setParameter('userId', $userId)
             ->setParameter('dateStart', $dateStart->format('Y-m-d'))
             ->setParameter('dateEnd', $dateEnd->format('Y-m-d'))
             ->getQuery()

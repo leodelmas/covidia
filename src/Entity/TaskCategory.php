@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=TaskCategoryRepository::class)
  */
-class TaskCategory
-{
+class TaskCategory {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -32,44 +31,48 @@ class TaskCategory
      */
     private $isPhysical;
 
-    public function getId(): ?int
-    {
+    /**
+     * @ORM\Column(type="string", length=7)
+     */
+    private $color;
+
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
+    public function setName(string $name): self {
         $this->name = $name;
-
         return $this;
     }
 
-    public function getIsRemote(): ?bool
-    {
+    public function getIsRemote(): ?bool {
         return $this->isRemote;
     }
 
-    public function setIsRemote(bool $isRemote): self
-    {
+    public function setIsRemote(bool $isRemote): self {
         $this->isRemote = $isRemote;
-
         return $this;
     }
 
-    public function getIsPhysical(): ?bool
-    {
+    public function getIsPhysical(): ?bool {
         return $this->isPhysical;
     }
 
-    public function setIsPhysical(bool $isPhysical): self
-    {
+    public function setIsPhysical(bool $isPhysical): self {
         $this->isPhysical = $isPhysical;
+        return $this;
+    }
 
+    public function getColor(): ?string  {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self {
+        $this->color = $color;
         return $this;
     }
 }
