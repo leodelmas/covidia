@@ -8,10 +8,6 @@ import './styles/global.scss';
 // Dependancies
 import 'jquery';
 import 'bootstrap';
-import '@fullcalendar/core';
-import '@fullcalendar/interaction';
-import '@fullcalendar/daygrid';
-import '@fullcalendar/timegrid';
 import 'select2';
 
 // Scripts

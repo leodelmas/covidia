@@ -25,7 +25,7 @@
                 <td>{{ task_category.isRemote ? 'Oui' : 'Non' }}</td>
                 <td>{{ task_category.isPhysical ? 'Oui' : 'Non' }}</td>
                 <td>
-                    <div style="width: 25px; height: 25px; background-color: {{ task_category.color }}; display: inline-block;"></div>
+                    <div style="width: 25px; height: 25px; background-color: {{ task_category.color }};"></div>
                 </td>
                <td>
                         <a href="{{ path('task_category.edit', {'id': task_category.id}) }}" class="btn btn-secondary">Editer</a>

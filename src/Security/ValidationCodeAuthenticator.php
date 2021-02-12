@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -80,14 +81,14 @@ class ValidationCodeAuthenticator extends AbstractGuardAuthenticator
             throw new InvalidCsrfTokenException();
         }
         if (time() > $credentials['timeout']) {
-            //TODO : Renvoie erreur
+            throw new CustomUserMessageAuthenticationException('Temps pour valider dépassé.');
         }
         if ($credentials['count'] >= 3) {
-            //TODO : Renvoie erreur
+            throw new CustomUserMessageAuthenticationException('Nombre de tentatives de connexion dépassé.');
         }
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
         if (!$user) {
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            throw new CustomUserMessageAuthenticationException('E-mail non trouvé.');
         }
         return $user;
     }
@@ -108,10 +109,11 @@ class ValidationCodeAuthenticator extends AbstractGuardAuthenticator
     /**
      * @param Request $request
      * @param AuthenticationException $exception
-     * @return Response|void|null
+     * @return RedirectResponse
      */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
-        //TODO : Renvoie erreur
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse {
+        // TODO: envoie message erreur
+        return new RedirectResponse('/validation');
     }
 
     /**
