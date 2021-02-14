@@ -17,6 +17,8 @@ class TaskCategoryController extends AbstractController
 {
     /**
      * @Route("/", name="task_category.index", methods={"GET"})
+     * @param TaskCategoryRepository $taskCategoryRepository
+     * @return Response
      */
     public function index(TaskCategoryRepository $taskCategoryRepository): Response
     {
@@ -27,6 +29,8 @@ class TaskCategoryController extends AbstractController
 
     /**
      * @Route("/new", name="task_category.new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -50,6 +54,9 @@ class TaskCategoryController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="task_category.edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param TaskCategory $taskCategory
+     * @return Response
      */
     public function edit(Request $request, TaskCategory $taskCategory): Response
     {
@@ -70,6 +77,9 @@ class TaskCategoryController extends AbstractController
 
     /**
      * @Route("/{id}", name="task_category.delete", methods={"DELETE"})
+     * @param Request $request
+     * @param TaskCategory $taskCategory
+     * @return Response
      */
     public function delete(Request $request, TaskCategory $taskCategory): Response
     {

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultView: 'dayGridMonth',
         locale: 'fr',
         editable: true,
-        aspectRatio: 2.2,
+        aspectRatio: 2.25,
         eventSources: [
             {
                 url: calendarEl.dataset.srcUrl,

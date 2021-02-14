@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\PlanningSearch;
 use App\Form\PlanningSearchType;
+use App\Repository\TaskCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +19,17 @@ class PlanningController extends AbstractController {
     /**
      * @Route("/", name="planning.index", methods={"GET"})
      * @param Request $request
+     * @param TaskCategoryRepository $taskCategoryRepository
      * @return Response
      */
-    public function index(Request $request): Response {
+    public function index(Request $request, TaskCategoryRepository $taskCategoryRepository): Response {
         $search = new PlanningSearch();
         $form   = $this->createForm(PlanningSearchType::class, $search);
         $form->handleRequest($request);
 
         return $this->render('pages/planning/index.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'taskCategories' => $taskCategoryRepository->findAll()
         ]);
     }
 }
