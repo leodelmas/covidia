@@ -8,3 +8,7 @@
         {{ include('pages/planning/task/_form.html.twig') }}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('taskForm') }}
+{% endblock %}

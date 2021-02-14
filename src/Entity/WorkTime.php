@@ -114,4 +114,9 @@ class WorkTime
         }
         return $this;
     }
+
+    public function displayLabel(): string {
+        $teleworked = $this->getIsTeleworked() ? " (Télétravail)" : " (Présentiel)";
+        return $this->getDateStart()->format("d/m/Y") . " > " . $this->getDateEnd()->format("d/m/Y") . $teleworked;
+    }
 }

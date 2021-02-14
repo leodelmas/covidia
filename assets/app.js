@@ -6,10 +6,9 @@ import 'select2/dist/css/select2.min.css';
 import './styles/global.scss';
 
 // Dependancies
-import 'jquery';
 import 'bootstrap';
 import 'select2';
+import 'flatpickr';
 
 // Scripts
 import './scripts/global';
-import './scripts/planning';
