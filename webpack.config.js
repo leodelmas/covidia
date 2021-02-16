@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('planning', './assets/scripts/planning.js')
+    .addEntry('stat', './assets/scripts/stat.js')
     .addEntry('taskForm', './assets/scripts/taskForm.js')
     .addEntry('workTimeForm', './assets/scripts/workTimeForm.js')
     .addStyleEntry('profile', './assets/styles/profile.scss')
