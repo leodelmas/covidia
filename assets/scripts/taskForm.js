@@ -23,7 +23,8 @@ $(document).ready(function() {
             dateFormat: "Y-m-d H:i:ss",
             minDate: workTimeStart,
             maxDate: workTimeEnd,
-            locale: French
+            locale: French,
+            enableTime: true
         });
 
         // Gestion des catégories
@@ -51,7 +52,8 @@ $(document).ready(function() {
             dateFormat: "Y-m-d H:i:ss",
             minDate: workTimeStart,
             maxDate: workTimeEnd,
-            locale: French
+            locale: French,
+            enableTime: true
         });
 
         // Gestion des catégories

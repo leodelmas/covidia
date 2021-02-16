@@ -9,15 +9,12 @@
             </div>
             <div class="modal-body">
                 {{ form_start(form) }}
-                <div class="row mb-4 align-items-end">
                     {{ form_row(form.taskCategories) }}
-                    <button class="btn btn-primary">Rechercher</button>
-                </div>
-                {{ form_end(form) }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <a class="btn btn-secondary" data-dismiss="modal">Annuler</a>
+                <button class="btn btn-primary">Rechercher</button>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
