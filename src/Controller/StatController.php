@@ -73,8 +73,51 @@ class StatController extends AbstractController
 
         $result = $statement->fetchAll();
 
-        dump($result);
+        for($i=0; $i < count($result); $i++){
+            if($result[$i]['teleworked'] == 0){
+                $tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] = intval($result[$i]['nbrTime']);
 
-        return json_encode($result);
+                for($l=0; $l < count($result); $l++){
+                    if($result[$i]['monthYear'] == $result[$l]['monthYear']
+                        && $result[$i]['nameUser'] == $result[$l]['nameUser']
+                        && $result[$i]['teleworked'] != $result[$l]['teleworked']){
+
+                        $tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] =
+                            100* (intval($result[$i]['nbrTime']) / ( intval($result[$i]['nbrTime']) + intval($result[$l]['nbrTime'])) );
+                    }
+                }
+
+                if($tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] > 100){
+                    $tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] = 100;
+                }
+            }else
+            {
+
+            }
+        }
+
+        dump($tabPourcent);
+
+        $tab = [
+            'type' => 'bar',
+            'data' => [
+                'labels' => ['Sylvain'],
+                'datasets' => [
+                    'label' => ['dsds'],
+                    'data' => [50],
+                    'backgroundColor' => ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
+                    'borderColor' => ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)',],
+                    'borderWidth' => 1
+                ]
+            ],
+            'options' => [
+                'title' => [
+                    'display' => true,
+                    'text' => 'Pourcentage du temps de travail en télétravail, sur le mois de 02/2021, par salariés'
+                ]
+            ]
+        ];
+        //return json_encode($result);
+        return json_encode($tab);
     }
 }

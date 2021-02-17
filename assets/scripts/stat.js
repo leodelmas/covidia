@@ -5,27 +5,29 @@ var ctx = document.getElementById('myChart');
 var obj = jQuery.parseJSON(ctx.dataset.stat);
 
 var myChart = new Chart(ctx, {
-    type: 'pie',
+    type: obj['type'],
     data: {
-        labels: ['Télétravail', 'Présentiel'],
+        labels: obj['data']['labels'],
         datasets: [{
-            label: '# of Votes',
-            data: [obj[0]["nbrTime"], obj[1]["nbrTime"]],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-            ],
-            borderWidth: 1
+            label: obj['data']['datasets']['label'],
+            data: obj['data']['datasets']['data'],
+            backgroundColor: obj['data']['datasets']['backgroundColor'],
+            borderColor: obj['data']['datasets']['borderColor'],
+            borderWidth: obj['data']['datasets']['borderWidth']
         }]
     },
     options: {
         title: {
-            display: true,
-            text: 'Mois 02/2021'
+            display: obj['options']['title']['display'],
+            text: obj['options']['title']['text']
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    max: 100
+                }
+            }]
         }
     }
 });
