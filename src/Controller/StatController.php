@@ -66,6 +66,7 @@ class StatController extends AbstractController
             ) AS Stat1
         
         GROUP BY monthYear, nameUser, teleworked
+        HAVING monthYear = '2/2021'
         ORDER BY monthYear, nameUser, teleworked";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
@@ -73,38 +74,41 @@ class StatController extends AbstractController
 
         $result = $statement->fetchAll();
 
+        //Filtrage pour un traitement plus simple
         for($i=0; $i < count($result); $i++){
-            if($result[$i]['teleworked'] == 0){
-                $tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] = intval($result[$i]['nbrTime']);
+            $filterTab[$result[$i]['nameUser']][$result[$i]['teleworked']] = intval($result[$i]['nbrTime']);
+        }
 
-                for($l=0; $l < count($result); $l++){
-                    if($result[$i]['monthYear'] == $result[$l]['monthYear']
-                        && $result[$i]['nameUser'] == $result[$l]['nameUser']
-                        && $result[$i]['teleworked'] != $result[$l]['teleworked']){
+        $labeltab = array();
+        $datatab = array();
 
-                        $tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] =
-                            100* (intval($result[$i]['nbrTime']) / ( intval($result[$i]['nbrTime']) + intval($result[$l]['nbrTime'])) );
-                    }
-                }
-
-                if($tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] > 100){
-                    $tabPourcent[$result[$i]['monthYear']][$result[$i]['nameUser']] = 100;
-                }
-            }else
-            {
-
+        //Calcul pourcentage
+        foreach($filterTab as $clef => $valeur){
+            dump($valeur[0], $valeur[1]);
+            //Pas de présentiel
+            if(false == isset($valeur[0])){
+                array_push($labeltab, $clef);
+                array_push($datatab, 100);
+                //Pas de télétravail
+            }else if(false == isset($valeur[1])){
+                array_push($labeltab, $clef);
+                array_push($datatab, 0);
+                //Les deux
+            }else{
+                array_push($labeltab, $clef);
+                array_push($datatab, round(100 * (intval($valeur[1]) / (intval($valeur[1]) + intval($valeur[0])))));
             }
         }
 
-        dump($tabPourcent);
+        dump($labeltab, $datatab);
 
         $tab = [
             'type' => 'bar',
             'data' => [
-                'labels' => ['Sylvain'],
+                'labels' => $labeltab,
                 'datasets' => [
                     'label' => ['dsds'],
-                    'data' => [50],
+                    'data' => $datatab,
                     'backgroundColor' => ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
                     'borderColor' => ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)',],
                     'borderWidth' => 1
