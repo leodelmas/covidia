@@ -119,4 +119,11 @@ class WorkTime
         $teleworked = $this->getIsTeleworked() ? " (Télétravail)" : " (Présentiel)";
         return $this->getDateStart()->format("d/m/Y") . " > " . $this->getDateEnd()->format("d/m/Y") . $teleworked;
     }
+
+    public function getFormattedJsonDates() {
+        return [
+            'from' => $this->getDateStart()->format('Y-m-d'),
+            'to' => $this->getDateEnd()->format('Y-m-d')
+        ];
+    }
 }

@@ -8,3 +8,7 @@
         {{ include('pages/planning/workTime/_form.html.twig') }}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('workTimeForm') }}
+{% endblock %}
