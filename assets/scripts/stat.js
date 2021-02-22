@@ -14,6 +14,13 @@ var myChart = new Chart(ctx, {
             backgroundColor: obj['data']['datasets']['backgroundColor'],
             borderColor: obj['data']['datasets']['borderColor'],
             borderWidth: obj['data']['datasets']['borderWidth']
+        },
+        {
+            label: obj['data']['datasets']['label'],
+            data: obj['data']['datasets']['data'],
+            backgroundColor: obj['data']['datasets']['backgroundColor'],
+            borderColor: obj['data']['datasets']['borderColor'],
+            borderWidth: obj['data']['datasets']['borderWidth']
         }]
     },
     options: {

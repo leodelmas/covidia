@@ -105,10 +105,10 @@ class StatController extends AbstractController
         $tab = [
             'type' => 'bar',
             'data' => [
-                'labels' => $labeltab,
+                'labels' => ['dsds'],
                 'datasets' => [
                     'label' => ['dsds'],
-                    'data' => $datatab,
+                    'data' => [50],
                     'backgroundColor' => ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
                     'borderColor' => ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)',],
                     'borderWidth' => 1
