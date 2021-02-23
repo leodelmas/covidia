@@ -1,32 +1,57 @@
 import Chart from 'chart.js';
 
-var ctx = document.getElementById('myChart');
-
+var ctx = document.getElementById('st1');
 var obj = jQuery.parseJSON(ctx.dataset.stat);
 
-var myChart = new Chart(ctx, {
-    type: obj['type'],
+var st1 = new Chart(ctx, {
+    type: 'bar',
     data: {
-        labels: obj['data']['labels'],
-        datasets: [{
-            label: obj['data']['datasets']['label'],
-            data: obj['data']['datasets']['data'],
-            backgroundColor: obj['data']['datasets']['backgroundColor'],
-            borderColor: obj['data']['datasets']['borderColor'],
-            borderWidth: obj['data']['datasets']['borderWidth']
-        },
-        {
-            label: obj['data']['datasets']['label'],
-            data: obj['data']['datasets']['data'],
-            backgroundColor: obj['data']['datasets']['backgroundColor'],
-            borderColor: obj['data']['datasets']['borderColor'],
-            borderWidth: obj['data']['datasets']['borderWidth']
-        }]
+        labels: ['télétravail', 'présentiel'],
+        datasets: obj['data']['datasets']
     },
     options: {
         title: {
-            display: obj['options']['title']['display'],
-            text: obj['options']['title']['text']
+            display: true,
+            text: 'Pourcentage du temps de travail par salarié en présentiel ou télétravail, sur le mois de 02/2021, par salariés'
+        },
+        tooltips: {
+            callbacks: {
+                title: function(chart, data) {
+                    return data.datasets[chart[0].label];
+                }
+            }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    max: 100
+                }
+            }]
+        }
+    }
+});
+
+var ctx = document.getElementById('st2');
+var obj = jQuery.parseJSON(ctx.dataset.stat);
+
+var st2 = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['télétravail', 'présentiel'],
+        datasets: obj['data']['datasets']
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Pourcentage du temps de travail en présentiel ou télétravail, sur le mois de 02/2021, par « personnel non cadre » ou « personnel cadre »'
+        },
+        tooltips: {
+            callbacks: {
+                title: function(chart, data) {
+                    return data.datasets[chart[0].label];
+                }
+            }
         },
         scales: {
             yAxes: [{
