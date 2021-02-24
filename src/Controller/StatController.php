@@ -26,6 +26,7 @@ class StatController extends AbstractController
             'controller_name' => 'StatController',
             'stat1' => $stats->req1(),
             'stat2' => $stats->req2(),
+            'stat3' => $stats->req3(),
         ]);
     }
 }

@@ -189,6 +189,65 @@ class StatRepository extends AbstractController
 
         $tab = $this->buildTab($filterTab);
 
+        return json_encode($tab);
+    }
+
+    /**
+     * Pourcentage des périodes passées en télétravail ou en présentiel par salariés, sur le mois de 02/2021
+     */
+    public function req3(string $monthYear = '2/2021')
+    {
+        $RAW_QUERY="
+        SELECT Stat1.monthYear, Stat1.nameUser, Stat1.teleworked, SUM(Stat1.days) as nbrDays
+        FROM (
+                 SELECT SUM(DATEDIFF(date_end,  date_start) + 1) as days, is_teleworked as teleworked, CONCAT(MONTH(date_end), '/', YEAR(date_end)) AS monthYear,
+                    CONCAT(user.firstname, ' ', user.lastname) as nameUser
+                 FROM work_time, user
+                 WHERE MONTH(date_start) =  MONTH(date_end)
+                   AND user_id = user.id
+        
+                 GROUP BY is_teleworked, monthYear, nameUser
+                 HAVING monthYear = '".$monthYear."'
+        
+                 UNION
+        
+                 SELECT SUM(DATEDIFF(LAST_DAY(date_start),  date_start) + 1) as days, is_teleworked as teleworked, CONCAT(MONTH(date_start), '/', YEAR(date_start)) AS monthYear,											
+                    CONCAT(firstname, ' ', lastname) as nameUser
+                 FROM work_time, user
+                 WHERE MONTH(date_start) <>  MONTH(date_end)
+                   AND user_id = user.id
+        
+                 GROUP BY is_teleworked, monthYear, nameUser
+                 HAVING monthYear = '".$monthYear."'
+        
+                 UNION
+        
+                 SELECT SUM(DATEDIFF(date_end,  date_add(date_end,interval -DAY(date_end)+1 DAY)) + 1) as days, is_teleworked as teleworked, CONCAT(MONTH(date_end), '/', YEAR(date_end)) AS monthYear,
+                    CONCAT(user.firstname, ' ', user.lastname) as nameUser
+                 FROM work_time, user
+                 WHERE MONTH(date_start) <>  MONTH(date_end)
+                   AND user_id = user.id
+        
+                 GROUP BY is_teleworked, monthYear, nameUser
+                 HAVING monthYear = '".$monthYear."'
+        
+             ) as Stat1
+        
+        GROUP BY Stat1.monthYear, Stat1.teleworked, Stat1.nameUser
+        ORDER BY Stat1.monthYear, Stat1.teleworked, Stat1.nameUser";
+
+        $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+
+        $result = $statement->fetchAll();
+
+        //Filtrage pour un traitement plus simple
+        for($i=0; $i < count($result); $i++){
+            $filterTab[$result[$i]['nameUser']][$result[$i]['teleworked']] = intval($result[$i]['nbrDays']);
+        }
+
+        $tab = $this->buildTab($filterTab);
+
         dump($tab);
 
         return json_encode($tab);
