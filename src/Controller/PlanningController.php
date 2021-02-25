@@ -23,12 +23,7 @@ class PlanningController extends AbstractController {
      * @return Response
      */
     public function index(Request $request, TaskCategoryRepository $taskCategoryRepository): Response {
-        $search = new PlanningSearch();
-        $form   = $this->createForm(PlanningSearchType::class, $search);
-        $form->handleRequest($request);
-
         return $this->render('pages/planning/index.html.twig', [
-            'form' => $form->createView(),
             'taskCategories' => $taskCategoryRepository->findAll()
         ]);
     }

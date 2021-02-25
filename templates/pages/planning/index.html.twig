@@ -33,24 +33,20 @@
                         </div>
                     </li>
                 </div>
-                <div class="d-flex justify-content-between mb-4">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Périodes</button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
-                            <a class="dropdown-item" href="{{ path('workTime.index') }}">Gérer</a>
-                            <a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tâches</button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
-                            <a class="dropdown-item" href="{{ path('task.index') }}">Gérer</a>
-                            <a class="dropdown-item" href="{{ path('task.new') }}">Créer</a>
-                        </div>
+                <div class="dropdown mb-4">
+                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Périodes</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
+                        <a class="dropdown-item" href="{{ path('workTime.index') }}">Gérer</a>
+                        <a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">Rechercher</button>
-                {{ include('pages/planning/_search_form.html.twig') }}
+                <div class="dropdown">
+                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tâches</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
+                        <a class="dropdown-item" href="{{ path('task.index') }}">Gérer</a>
+                        <a class="dropdown-item" href="{{ path('task.new') }}">Créer</a>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-10">
                 <div id="calendar-holder" data-src-url="{{ path('fc_load_events') }}"></div>
