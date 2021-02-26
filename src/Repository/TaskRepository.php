@@ -2,10 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\PlanningSearch;
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,27 +39,5 @@ class TaskRepository extends ServiceEntityRepository {
         return $this->createQueryBuilder('p')
             ->andWhere('p.user = :userId')
             ->setParameter('userId', $userId);
-    }
-
-    /**
-     * @param int $userId
-     * @return Task[]
-     */
-    public function findAllFiltered(int $userId, $categories): array {
-        $query = $this->findAllByUserQuery($userId);
-
-        /*
-        $query = $query
-            ->andWhere('p.taskCategory = :taskCategory')
-            ->setParameter('taskCategory', 1);
-        */
-
-        foreach($categories as $category) {
-            $query = $query
-                ->andWhere('p.taskCategory = :taskCategory')
-                ->setParameter('taskCategory',1);
-        }
-
-        return $query->getQuery()->getResult();
     }
 }

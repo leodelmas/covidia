@@ -5,18 +5,16 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/users")
- */
 class UserController extends AbstractController {
 
     /**
-     * @Route("/", name="user.index", methods={"GET"})
+     * @Route("/admin/users", name="user.index", methods={"GET"})
      * @param UserRepository $userRepository
      * @return Response
      */
@@ -27,7 +25,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/new", name="user.new", methods={"GET","POST"})
+     * @Route("/admin/users/new", name="user.new", methods={"GET","POST"})
      * @param Request $request
      * @return Response
      */
@@ -51,7 +49,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/{id}/edit", name="user.edit", methods={"GET","POST"})
+     * @Route("/admin/users/{id}/edit", name="user.edit", methods={"GET","POST"})
      * @param Request $request
      * @param User $user
      * @return Response
@@ -73,7 +71,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/{id}", name="user.delete", methods={"DELETE"})
+     * @Route("/admin/users/{id}", name="user.delete", methods={"DELETE"})
      * @param Request $request
      * @param User $user
      * @return Response
@@ -87,5 +85,16 @@ class UserController extends AbstractController {
         }
 
         return $this->redirectToRoute('user.index');
+    }
+
+    /**
+     * @Route("/profile", name="user.profile", methods={"GET"})
+     * @param Security $security
+     * @return Response
+     */
+    public function profile(Security $security): Response {
+        return $this->render('pages/user/profile.html.twig', [
+            'user' => $security->getUser(),
+        ]);
     }
 }

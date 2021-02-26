@@ -6,6 +6,13 @@
     <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-lg-2">
+                <div class="dropdown mb-4">
+                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Créer</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
+                        <a class="dropdown-item" href="{{ path('workTime.new') }}">Période</a>
+                        <a class="dropdown-item" href="{{ path('task.new') }}">Tâche</a>
+                    </div>
+                </div>
                 <div class="accordion list-group mb-4" id="accordionCaption">
                     <li class="list-group-item">
                         <div id="headingOne">
@@ -33,18 +40,11 @@
                         </div>
                     </li>
                 </div>
-                <div class="dropdown mb-4">
-                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Périodes</button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
-                        <a class="dropdown-item" href="{{ path('workTime.index') }}">Gérer</a>
-                        <a class="dropdown-item" href="{{ path('workTime.new') }}">Créer</a>
-                    </div>
-                </div>
                 <div class="dropdown">
-                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tâches</button>
+                    <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gérer</button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
-                        <a class="dropdown-item" href="{{ path('task.index') }}">Gérer</a>
-                        <a class="dropdown-item" href="{{ path('task.new') }}">Créer</a>
+                        <a class="dropdown-item" href="{{ path('workTime.index') }}">Périodes</a>
+                        <a class="dropdown-item" href="{{ path('task.index') }}">Tâches</a>
                     </div>
                 </div>
             </div>

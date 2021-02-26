@@ -17,6 +17,9 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+                <a class="nav-link" href="{{ path('user.profile') }}">Profil</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ path('planning.index') }}">Planning</a>
             </li>
             {% if app.user and is_granted('ROLE_ADMIN') %}
