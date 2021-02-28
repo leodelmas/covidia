@@ -1,18 +1,16 @@
 import Chart from 'chart.js';
 import {French} from "flatpickr/dist/l10n/fr";
+import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
 
 $(document).ready(function() {
 
     let dateTimePickers = $('input[type=datetime-local]');
-    dateTimePickers.prop('enabled', true);
 
     dateTimePickers.flatpickr({
-        allowInput: true,
         altInput: true,
-        altFormat: "n/Y",
-        dateFormat: "n/Y ",
         locale: French,
-        enableTime: true
+        static: true,
+        plugins: [new monthSelectPlugin({shorthand: false, dateFormat: "n/Y", altFormat: "n/Y"})]
     });
 
     dateTimePickers.on('change', function() {
