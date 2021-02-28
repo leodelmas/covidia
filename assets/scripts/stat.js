@@ -1,97 +1,118 @@
 import Chart from 'chart.js';
+import {French} from "flatpickr/dist/l10n/fr";
 
-var ctx = document.getElementById('st1');
-var obj = jQuery.parseJSON(ctx.dataset.stat);
+$(document).ready(function() {
 
-var st1 = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['télétravail', 'présentiel'],
-        datasets: obj['data']['datasets']
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'Pourcentage du temps de travail par salarié en télétravail ou présentiel, sur le mois de 02/2021, par salariés'
+    let dateTimePickers = $('input[type=datetime-local]');
+    dateTimePickers.prop('enabled', true);
+
+    dateTimePickers.flatpickr({
+        allowInput: true,
+        altInput: true,
+        altFormat: "n/Y",
+        dateFormat: "n/Y ",
+        locale: French,
+        enableTime: true
+    });
+
+    dateTimePickers.on('change', function() {
+        location.href='?month='+dateTimePickers[0].value;
+    });
+
+    var ctx = document.getElementById('st1');
+    var obj = jQuery.parseJSON(ctx.dataset.stat);
+
+    var st1 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['télétravail', 'présentiel'],
+            datasets: obj['data']['datasets']
         },
-        tooltips: {
-            callbacks: {
-                title: function(chart, data) {
-                    return data.datasets[chart[0].label];
+        options: {
+            title: {
+                display: true,
+                text: obj['titre']
+            },
+            tooltips: {
+                callbacks: {
+                    title: function(chart, data) {
+                        return data.datasets[chart[0].label];
+                    }
                 }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 100
+                    }
+                }]
             }
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    min: 0,
-                    max: 100
-                }
-            }]
         }
-    }
-});
+    });
 
-var ctx = document.getElementById('st2');
-var obj = jQuery.parseJSON(ctx.dataset.stat);
+    var ctx = document.getElementById('st2');
+    var obj = jQuery.parseJSON(ctx.dataset.stat);
 
-var st2 = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['télétravail', 'présentiel'],
-        datasets: obj['data']['datasets']
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'Pourcentage du temps de travail en présentiel ou télétravail, sur le mois de 02/2021, par personnel « cadre » ou « non cadre »'
+    var st2 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['télétravail', 'présentiel'],
+            datasets: obj['data']['datasets']
         },
-        tooltips: {
-            callbacks: {
-                title: function(chart, data) {
-                    return data.datasets[chart[0].label];
+        options: {
+            title: {
+                display: true,
+                text: obj['titre']
+            },
+            tooltips: {
+                callbacks: {
+                    title: function(chart, data) {
+                        return data.datasets[chart[0].label];
+                    }
                 }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 100
+                    }
+                }]
             }
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    min: 0,
-                    max: 100
-                }
-            }]
         }
-    }
-});
+    });
 
-var ctx = document.getElementById('st3');
-var obj = jQuery.parseJSON(ctx.dataset.stat);
+    var ctx = document.getElementById('st5');
+    var obj = jQuery.parseJSON(ctx.dataset.stat);
 
-var st2 = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['télétravail', 'présentiel'],
-        datasets: obj['data']['datasets']
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'Pourcentage des périodes passées en télétravail ou en présentiel par salariés, sur le mois de 02/2021'
+    var st2 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['télétravail', 'présentiel'],
+            datasets: obj['data']['datasets']
         },
-        tooltips: {
-            callbacks: {
-                title: function(chart, data) {
-                    return data.datasets[chart[0].label];
+        options: {
+            title: {
+                display: true,
+                text: obj['titre']
+            },
+            tooltips: {
+                callbacks: {
+                    title: function(chart, data) {
+                        return data.datasets[chart[0].label];
+                    }
                 }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 100
+                    }
+                }]
             }
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    min: 0,
-                    max: 100
-                }
-            }]
         }
-    }
+    });
+
 });

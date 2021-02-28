@@ -72,9 +72,9 @@ class StatRepository extends AbstractController
     }
 
     /**
-     * Pourcentage du temps de travail par salarié en présentiel ou télétravail, sur le mois de 02/2021, par salariés
+     * Pourcentage du temps de travail par salarié en présentiel ou télétravail, par salariés
      */
-    public function req1(string $monthYear = '2/2021')
+    public function req1(string $monthYear)
     {
         $RAW_QUERY = "
         SELECT SUM(Stat1.nbrTime) AS nbrTime, Stat1.monthYear AS monthYear, Stat1.nameUser as nameUser, Stat1.teleworked as teleworked
@@ -124,15 +124,19 @@ class StatRepository extends AbstractController
             $filterTab[$result[$i]['nameUser']][$result[$i]['teleworked']] = intval($result[$i]['nbrTime']);
         }
 
-        $tab = $this->buildTab($filterTab);
+        $tab = array();
+        if(true == isset($filterTab)){
+            $tab = $this->buildTab($filterTab);
+            $tab['titre'] = "Pourcentage du temps de travail par salarié en télétravail ou présentiel, par salariés";
+        }
 
         return json_encode($tab);
     }
 
     /**
-     * Pourcentage du temps de travail en présentiel ou télétravail, sur le mois de 02/2021, par « personnel non cadre » ou « personnel cadre »
+     * Pourcentage du temps de travail en présentiel ou télétravail, par « personnel non cadre » ou « personnel cadre »
      */
-    public function req2(string $monthYear = '2/2021')
+    public function req2(string $monthYear)
     {
         $RAW_QUERY = "
         SELECT SUM(Stat1.nbrTime) AS nbrTime, Stat1.monthYear AS monthYear, Stat1.executive as executive, Stat1.teleworked as teleworked
@@ -187,15 +191,19 @@ class StatRepository extends AbstractController
             $filterTab[$result[$i]['executive']][$result[$i]['teleworked']] = intval($result[$i]['nbrTime']);
         }
 
-        $tab = $this->buildTab($filterTab);
+        $tab = array();
+        if(true == isset($filterTab)){
+            $tab = $this->buildTab($filterTab);
+            $tab['titre'] = "Pourcentage du temps de travail en présentiel ou télétravail, par personnel « cadre » ou « non cadre »";
+        }
 
         return json_encode($tab);
     }
 
     /**
-     * Pourcentage des périodes passées en télétravail ou en présentiel par salariés, sur le mois de 02/2021
+     * Pourcentage des périodes passées en télétravail ou en présentiel par salariés
      */
-    public function req3(string $monthYear = '2/2021')
+    public function req5(string $monthYear)
     {
         $RAW_QUERY="
         SELECT Stat1.monthYear, Stat1.nameUser, Stat1.teleworked, SUM(Stat1.days) as nbrDays
@@ -246,9 +254,74 @@ class StatRepository extends AbstractController
             $filterTab[$result[$i]['nameUser']][$result[$i]['teleworked']] = intval($result[$i]['nbrDays']);
         }
 
-        $tab = $this->buildTab($filterTab);
+        $tab = array();
+        if(true == isset($filterTab)){
+            $tab = $this->buildTab($filterTab);
+            $tab['titre'] = "Pourcentage des périodes passées en télétravail ou en présentiel par salariés";
+        }
 
-        dump($tab);
+        return json_encode($tab);
+    }
+
+    /**
+     * D’avoir un récapitulatif mensuel cumulé des tâches effectuées par un salarié.
+     * Ce récapitulatif devra être sous le format suivant : Catégorie – Temps passé. Le détail des « commentaires » ne devra pas apparaître
+     */
+    public function req3(string $monthYear)
+    {
+        $RAW_QUERY="
+        SELECT Stat1.userId as userId, Stat1.monthYear AS monthYear, Stat1.categ as categ, SUM(Stat1.nbrTime) AS nbrTime
+        FROM (
+                 SELECT SUM(TIMEDIFF(t.date_time_end, t.date_time_start)) AS nbrTime, CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) AS monthYear, tc.id as categ, u.id as userId
+                 FROM task t, user u, task_category tc
+                 WHERE t.user_id = u.id
+                           AND t.task_category_id = tc.id
+                           AND MONTH(t.date_time_start) = MONTH(t.date_time_end)
+        
+        GROUP BY monthYear, categ, userId
+        HAVING monthYear = '".$monthYear."'
+        
+        UNION
+        
+        SELECT SUM(TIMEDIFF(ADDTIME(LAST_DAY(t.date_time_start), '24:00:00'), t.date_time_start)) AS nbrTime, CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) AS monthYear, tc.id as categ, u.id as userId
+        FROM task t, user u, task_category tc
+        WHERE t.user_id = u.id
+                  AND t.task_category_id = tc.id
+                  AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
+        
+        GROUP BY monthYear, categ, userId
+        HAVING monthYear = '".$monthYear."'
+        
+        UNION
+        
+        SELECT SUM(TIMEDIFF(t.date_time_end, ADDTIME(LAST_DAY(t.date_time_start), '24:00:00'))) AS nbrTime, CONCAT(MONTH(t.date_time_end), '/', YEAR(t.date_time_end)) AS monthYear, tc.id as categ, u.id as userId
+        FROM task t, user u, task_category tc
+        WHERE t.user_id = u.id
+                  AND t.task_category_id = tc.id
+                  AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
+        
+        GROUP BY monthYear, categ, userId
+        HAVING monthYear = '".$monthYear."'
+        
+            ) AS Stat1
+        
+        GROUP BY monthYear, categ, userId
+        ORDER BY monthYear, userId, categ";
+
+        $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+
+        $result = $statement->fetchAll();
+
+
+
+        //Filtrage pour un traitement plus simple
+        for($i=0; $i < count($result); $i++){
+            $filterTab[$result[$i]['nameUser']][$result[$i]['teleworked']] = intval($result[$i]['nbrDays']);
+        }
+
+        $tab = $this->buildTab($filterTab);
+        $tab['titre'] = "02/2021";
 
         return json_encode($tab);
     }
