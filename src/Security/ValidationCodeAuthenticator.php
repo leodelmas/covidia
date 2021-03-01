@@ -33,6 +33,7 @@ class ValidationCodeAuthenticator extends AbstractGuardAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $session;
+    private $flashBag;
 
     /**
      * ValidationCodeAuthenticator constructor.
@@ -40,12 +41,14 @@ class ValidationCodeAuthenticator extends AbstractGuardAuthenticator
      * @param UrlGeneratorInterface $urlGenerator
      * @param CsrfTokenManagerInterface $csrfTokenManager
      * @param SessionInterface $session
+     * @param FlashBagInterface $flashBag
      */
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, SessionInterface $session) {
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, SessionInterface $session, FlashBagInterface $flashBag) {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->session = $session;
+        $this->flashBag = $flashBag;
     }
 
     /**
@@ -103,7 +106,7 @@ class ValidationCodeAuthenticator extends AbstractGuardAuthenticator
             return true;
         }
         $this->session->set(self::COUNT_SESSION_KEY, $credentials['count'] + 1);
-        return false;
+        throw new CustomUserMessageAuthenticationException('Code invalide.');
     }
 
     /**
@@ -112,7 +115,7 @@ class ValidationCodeAuthenticator extends AbstractGuardAuthenticator
      * @return RedirectResponse
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse {
-        // TODO: envoie message erreur
+        $this->flashBag->add('error', $exception->getMessage());
         return new RedirectResponse('/validation');
     }
 
