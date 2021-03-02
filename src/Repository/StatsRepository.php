@@ -6,7 +6,7 @@ namespace App\Repository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ObjectManager;
 
-class StatRepository extends AbstractController
+class StatsRepository extends AbstractController
 {
     /**
      * ObjectManager
@@ -127,7 +127,7 @@ class StatRepository extends AbstractController
         $tab = array();
         if(true == isset($filterTab)){
             $tab = $this->buildTab($filterTab);
-            $tab['titre'] = "Pourcentage du temps de travail par salarié en télétravail ou présentiel, par salariés";
+            $tab['titre'] = "Temps de travail en télétravail ou présentiel / salarié";
         }
 
         return json_encode($tab);
@@ -194,7 +194,7 @@ class StatRepository extends AbstractController
         $tab = array();
         if(true == isset($filterTab)){
             $tab = $this->buildTab($filterTab);
-            $tab['titre'] = "Pourcentage du temps de travail en présentiel ou télétravail, par personnel « cadre » ou « non cadre »";
+            $tab['titre'] = "Temps de travail en présentiel ou télétravail / salarié cadre ou non";
         }
 
         return json_encode($tab);

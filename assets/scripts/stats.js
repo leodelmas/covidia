@@ -4,9 +4,10 @@ import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
 
 $(document).ready(function() {
 
-    let dateTimePickers = $('input[type=datetime-local]');
+    let dateTimePickers = $('input[type=month]');
 
     dateTimePickers.flatpickr({
+        allowInput: true,
         altInput: true,
         locale: French,
         static: true,

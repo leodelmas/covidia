@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Statistiques</h1>
+        <div class="d-flex justify-content-start mb-4">
+            <button class="btn btn-primary" onclick="location.href='?month={{ previousMonth }}';"><i class="fas fa-angle-left"></i></button>
+            <input value="{{ month }}" type="month" />
+            <button class="btn btn-primary" onclick="location.href='?month={{ nextMonth }}';"><i class="fas fa-angle-right"></i></button>
+        </div>
+        <div class="accordion list-group mb-4" id="accordionStats">
+            <li class="list-group-item">
+                <div id="headingOne">
+                    <button class="btn btn-block d-flex w-100 justify-content-between" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Temps de travail en télétravail ou présentiel / salarié
+                    </button>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionStats">
+                    {% if stat1|length > 2 %}
+                        <canvas id="st1" height="40vh" width="80vw" data-stat="{{ stat1 }}"></canvas>
+                    {% else %}
+                        <p class="text-muted">Pas de données pour le moment</p>
+                    {% endif %}
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div id="headingTwo">
+                    <button class="btn btn-block d-flex w-100 justify-content-between" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                        Temps de travail en présentiel ou télétravail / salarié cadre ou non
+                    </button>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionStats">
+                    {% if stat2|length > 2 %}
+                        <canvas id="st2" height="40vh" width="80vw" data-stat="{{ stat2 }}"></canvas>
+                    {% else %}
+                        <p class="text-muted">Pas de données pour le moment</p>
+                    {% endif %}
+                </div>
+            </li>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('stats') }}
+{% endblock %}

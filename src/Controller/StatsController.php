@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\StatRepository;
+use App\Repository\StatsRepository;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-class StatController extends AbstractController
+class StatsController extends AbstractController
 {
     /**
      * ObjectManager
@@ -18,10 +18,12 @@ class StatController extends AbstractController
     private $objectManager;
 
     /**
-     * @Route("/stat", name="stat", methods={"GET"})
+     * @Route("/stats", name="stats.index", methods={"GET"})
+     * @param Request $request
+     * @param StatsRepository $stats
+     * @return Response
      */
-    public function index(Request $request, StatRepository $stats): Response
-    {
+    public function index(Request $request, StatsRepository $stats): Response {
         $stats->setObjectManager($this->getDoctrine()->getManager());
 
         if(null == $request->query->get('month')){
@@ -34,8 +36,8 @@ class StatController extends AbstractController
         $nextMonth = date("n/Y", strtotime("+1 month", $time));
         $previousMonth = date("n/Y", strtotime("-1 month", $time));
 
-        return $this->render('pages/stat/index.html.twig', [
-            'controller_name' => 'StatController',
+        return $this->render('pages/stats/index.html.twig', [
+            'controller_name' => 'StatsController',
             'month' => $month,
             'nextMonth' => $nextMonth,
             'previousMonth' => $previousMonth,
