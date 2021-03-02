@@ -28,11 +28,11 @@
                     <td>{{ user.phone }}</td>
                     <td>{{ user.job.name }}</td>
                     <td>
-                        <a href="{{ path('user.edit', {'id': user.id}) }}" class="btn btn-secondary">Editer</a>
+                        <a href="{{ path('user.edit', {'id': user.id}) }}" class="btn btn-secondary"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{ path('user.delete', {id: user.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer cet utilisateur ?')">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                            <button class="btn btn-danger">Supprimer</button>
+                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -43,6 +43,6 @@
             {% endfor %}
             </tbody>
         </table>
-        <a href="{{ path('user.new') }}" class="btn btn-primary">Créer</a>
+        <a href="{{ path('user.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
     </div>
 {% endblock %}

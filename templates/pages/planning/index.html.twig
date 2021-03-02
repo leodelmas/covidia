@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="dropdown mb-4">
-                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Créer</button>
+                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonWorkTimes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> Créer</button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonWorkTimes">
                         <a class="dropdown-item" href="{{ path('workTime.new') }}">Période</a>
                         <a class="dropdown-item" href="{{ path('task.new') }}">Tâche</a>
@@ -17,7 +17,7 @@
                     <li class="list-group-item">
                         <div id="headingOne">
                             <button class="btn btn-block d-flex w-100 justify-content-between" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <h5 class="mb-1">Périodes</h5>
+                                <h5 class="mb-1"><i class="far fa-calendar"></i> Périodes</h5>
                                 <span class="badge badge-primary badge-pill">2</span>
                             </button>
                         </div>
@@ -29,7 +29,7 @@
                     <li class="list-group-item">
                         <div id="headingTwo">
                             <button class="btn btn-block d-flex w-100 justify-content-between" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                <h5 class="mb-1">Catégories</h5>
+                                <h5 class="mb-1"><i class="fas fa-tasks"></i> Catégories</h5>
                                 <span class="badge badge-primary badge-pill">{{ taskCategories|length }}</span>
                             </button>
                         </div>
@@ -41,7 +41,7 @@
                     </li>
                 </div>
                 <div class="dropdown">
-                    <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gérer</button>
+                    <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButtonTasks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i> Gérer</button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTasks">
                         <a class="dropdown-item" href="{{ path('workTime.index') }}">Périodes</a>
                         <a class="dropdown-item" href="{{ path('task.index') }}">Tâches</a>

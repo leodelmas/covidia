@@ -24,7 +24,7 @@
                     <td>{{ task.dateTimeEnd|date('d/m/Y H:i') }}</td>
                     <td>{{ task.comment }}</td>
                     <td>
-                        <a href="{{ path('task.edit', {'id': task.id}) }}" class="btn btn-secondary">Editer</a>
+                        <a href="{{ path('task.edit', {'id': task.id}) }}" class="btn btn-secondary"><i class="fas fa-edit"></i></a>
                         {{ include('pages/planning/task/_delete_form.html.twig') }}
                     </td>
                 </tr>
@@ -36,8 +36,8 @@
             </tbody>
         </table>
         <div class="d-flex justify-content-between">
-            <a href="{{ path('planning.index') }}" class="btn btn-secondary">Retour</a>
-            <a href="{{ path('task.new') }}" class="btn btn-primary">Créer</a>
+            <a href="{{ path('planning.index') }}" class="btn btn-secondary"><i class="fas fa-long-arrow-alt-left"></i></a>
+            <a href="{{ path('task.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
         </div>
     </div>
 {% endblock %}

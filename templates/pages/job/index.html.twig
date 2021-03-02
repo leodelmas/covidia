@@ -20,11 +20,11 @@
                     <td>{{ job.id }}</td>
                     <td>{{ job.name }}</td>
                     <td>
-                        <a href="{{ path('job.edit', {'id': job.id}) }}" class="btn btn-secondary">Editer</a>
+                        <a href="{{ path('job.edit', {'id': job.id}) }}" class="btn btn-secondary"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{ path('job.delete', {id: job.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer cet emploi ?')">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ job.id) }}">
-                            <button class="btn btn-danger">Supprimer</button>
+                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -35,7 +35,7 @@
             {% endfor %}
             </tbody>
         </table>
-        <a href="{{ path('job.new') }}" class="btn btn-primary">Créer</a>
+        <a href="{{ path('job.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
     </div>
 {% endblock %}
 

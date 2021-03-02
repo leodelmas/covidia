@@ -28,11 +28,11 @@
                     <div class="item-badge" style="background-color: {{ task_category.color }};"></div>
                 </td>
                <td>
-                        <a href="{{ path('task_category.edit', {'id': task_category.id}) }}" class="btn btn-secondary">Editer</a>
+                        <a href="{{ path('task_category.edit', {'id': task_category.id}) }}" class="btn btn-secondary"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{ path('task_category.delete', {id: task_category.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de supprimer ce type de tâche ?')">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task_category.id) }}">
-                            <button class="btn btn-danger">Supprimer</button>
+                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
             </tr>
@@ -44,7 +44,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('task_category.new') }}" class="btn btn-primary">Créer</a>
+    <a href="{{ path('task_category.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
 </div>
    
 {% endblock %}

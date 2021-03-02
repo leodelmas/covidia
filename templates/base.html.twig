@@ -17,9 +17,6 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('user.profile') }}">Profil</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{{ path('planning.index') }}">Planning</a>
             </li>
             {% if app.user and is_granted('ROLE_ADMIN') %}
@@ -35,6 +32,9 @@
         </ul>
         {% if app.user %}
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('user.profile') }}"><i class="fas fa-user"></i></a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ path('sos.index') }}" class="nav-link">SOS</a>
                 </li>
