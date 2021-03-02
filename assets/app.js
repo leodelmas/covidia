@@ -5,8 +5,8 @@ import '@fullcalendar/daygrid/main.min.css';
 import 'select2/dist/css/select2.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './styles/global.scss';
-import '../node_modules/chart.js/dist/Chart.min.css';
-import '../node_modules/flatpickr/dist/plugins/monthSelect/style.css';
+import 'chart.js/dist/Chart.min.css';
+import 'flatpickr/dist/plugins/monthSelect/style.css';
 
 // Dependancies
 import 'bootstrap';
