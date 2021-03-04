@@ -7,31 +7,29 @@
     {{ encore_entry_link_tags('app') }}
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ path('home') }}">Covidia</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('planning.index') }}">Planning</a>
-            </li>
-            {% if app.user and is_granted('ROLE_ADMIN') %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                        <a class="dropdown-item" href="{{ path('user.index') }}">Utilisateurs</a>
-                        <a class="dropdown-item" href="{{ path('job.index') }}">Emplois</a>
-                        <a class="dropdown-item" href="{{ path('task_category.index') }}">Type de tâches</a>
-                        <a class="dropdown-item" href="{{ path('stats.index') }}">Statistiques</a>
-                    </div>
-                </li>
-            {% endif %}
-        </ul>
-        {% if app.user %}
+<body class="bg-light">
+{% if app.user %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <a class="navbar-brand" href="{{ path('planning.index') }}">Covidia</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                            <a class="dropdown-item" href="{{ path('user.index') }}">Utilisateurs</a>
+                            <a class="dropdown-item" href="{{ path('job.index') }}">Emplois</a>
+                            <a class="dropdown-item" href="{{ path('task_category.index') }}">Catégories</a>
+                            <a class="dropdown-item" href="{{ path('stats.index') }}">Statistiques</a>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('user.profile') }}"><i class="fas fa-user"></i></a>
@@ -43,9 +41,9 @@
                     <a href="{{ path('logout') }}" class="nav-link">Se déconnecter</a>
                 </li>
             </ul>
-        {% endif %}
-    </div>
-</nav>
+        </div>
+    </nav>
+{% endif %}
 {% block body %}{% endblock %}
 {{ encore_entry_script_tags('app') }}
 {% block javascripts %}{% endblock %}

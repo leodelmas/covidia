@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des Type de Tâches{% endblock %}
+{% block title %}Catégories{% endblock %}
 
 {% block body %}
-<div class="container">
- <h1>Gestion des Type de Tâches</h1>
+<div class="container mt-4">
+ <h1 class="h4 mb-2">Catégories</h1>
      {{ include('pages/_partials/messages.html.twig') }}
-    <table class="table table-striped">
+    <table class="table table-striped table-borderless bg-white shadow rounded">
             <thead>
             <tr>
                 <th>Id</th>
@@ -38,13 +38,15 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">Aucun type de têche</td>
+                <td colspan="5">Aucune catégorie</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('task_category.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('task_category.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+        {{ include('pages/_partials/pagination.html.twig') }}
+    </div>
 </div>
    
 {% endblock %}

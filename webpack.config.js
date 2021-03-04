@@ -26,6 +26,7 @@ Encore
     .addEntry('taskForm', './assets/scripts/taskForm.js')
     .addEntry('workTimeForm', './assets/scripts/workTimeForm.js')
     .addStyleEntry('profile', './assets/styles/profile.scss')
+    .addStyleEntry('security', './assets/styles/security.scss')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

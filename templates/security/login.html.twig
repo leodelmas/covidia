@@ -2,23 +2,43 @@
 
 {% block title %}Connexion{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('security') }}
+{% endblock %}
+
 {% block body %}
-    <div class="container mt-4">
-        <h1>Connexion</h1>
-        <form method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-            <div class="from-group mb-3">
-                <label for="email">E-mail</label>
-                <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Covidia - Se connecter</h1>
+                            </div>
+                            <form method="post">
+                                {% if error %}
+                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+                                <div class="from-group mb-3">
+                                    <label for="email">E-mail</label>
+                                    <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control">
+                                </div>
+                                <div class="from-group mb-3">
+                                    <label for="password">Mot de passe</label>
+                                    <input type="password" name="password" id="password" class="form-control">
+                                </div>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                <button class="btn btn-primary btn-block" type="submit">Se connecter</button>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="#">Mot de passe oublié ?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="from-group mb-3">
-                <label for="password">Mot de passe</label>
-                <input type="password" name="password" id="password" class="form-control">
-            </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <button class="btn btn-primary" type="submit">Se connecter</button>
-        </form>
+        </div>
     </div>
 {% endblock %}

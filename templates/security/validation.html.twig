@@ -2,20 +2,36 @@
 
 {% block title %}Confirmation{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('security') }}
+{% endblock %}
+
 {% block body %}
-    <div class="container mt-4">
-        <h1>Confirmation</h1>
-        <p>Vous avez reçu un code par e-mail. Merci de le valider afin de pouvoir vous connecter.</p>
-        <form method="post">
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <div class="alert alert-danger">{{ flashMessage }}</div>
-            {% endfor %}
-            <div class="from-group mb-3">
-                <label for="password">Code</label>
-                <input type="text" name="password" id="paswword" class="form-control">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4">Covidia - Confirmer</h1>
+                            </div>
+                            <form method="post">
+                                {% for flashMessage in app.session.flashbag.get('error') %}
+                                    <div class="alert alert-danger">{{ flashMessage }}</div>
+                                {% endfor %}
+                                <div class="from-group mb-3">
+                                    <label for="password">Code</label>
+                                    <input type="text" name="password" id="paswword" class="form-control">
+                                    <small id="passwordHelp" class="form-text text-muted">Code temporaire reçu par e-mail.</small>
+                                </div>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                <button class="btn btn-primary btn-block" type="submit">Valider</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <button class="btn btn-primary" type="submit">Valider</button>
-        </form>
+        </div>
     </div>
 {% endblock %}
