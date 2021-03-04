@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 
+use App\Entity\TaskCategory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ObjectManager;
 
@@ -267,62 +268,77 @@ class StatsRepository extends AbstractController
      * D’avoir un récapitulatif mensuel cumulé des tâches effectuées par un salarié.
      * Ce récapitulatif devra être sous le format suivant : Catégorie – Temps passé. Le détail des « commentaires » ne devra pas apparaître
      */
-    public function req3(string $monthYear)
+    public function req3(string $monthYear, $taskCategory)
     {
         $RAW_QUERY="
-        SELECT Stat1.userId as userId, Stat1.monthYear AS monthYear, Stat1.categ as categ, SUM(Stat1.nbrTime) AS nbrTime
+        SELECT Stat1.nameUser as nameUser, Stat1.monthYear AS monthYear, Stat1.categ as categ, SUM(Stat1.nbrTime) AS nbrTime
         FROM (
-                 SELECT SUM(TIMEDIFF(t.date_time_end, t.date_time_start)) AS nbrTime, CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) AS monthYear, tc.id as categ, u.id as userId
+                 SELECT SUM(TIMEDIFF(t.date_time_end, t.date_time_start)) AS nbrTime, CONCAT(MONTH(t.date_time_start), '/', 
+                        YEAR(t.date_time_start)) AS monthYear, tc.id as categ, CONCAT(u.firstname, ' ', u.lastname) as nameUser
                  FROM task t, user u, task_category tc
                  WHERE t.user_id = u.id
                            AND t.task_category_id = tc.id
                            AND MONTH(t.date_time_start) = MONTH(t.date_time_end)
         
-        GROUP BY monthYear, categ, userId
-        HAVING monthYear = '".$monthYear."'
-        
-        UNION
-        
-        SELECT SUM(TIMEDIFF(ADDTIME(LAST_DAY(t.date_time_start), '24:00:00'), t.date_time_start)) AS nbrTime, CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) AS monthYear, tc.id as categ, u.id as userId
-        FROM task t, user u, task_category tc
-        WHERE t.user_id = u.id
-                  AND t.task_category_id = tc.id
-                  AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
-        
-        GROUP BY monthYear, categ, userId
-        HAVING monthYear = '".$monthYear."'
-        
-        UNION
-        
-        SELECT SUM(TIMEDIFF(t.date_time_end, ADDTIME(LAST_DAY(t.date_time_start), '24:00:00'))) AS nbrTime, CONCAT(MONTH(t.date_time_end), '/', YEAR(t.date_time_end)) AS monthYear, tc.id as categ, u.id as userId
-        FROM task t, user u, task_category tc
-        WHERE t.user_id = u.id
-                  AND t.task_category_id = tc.id
-                  AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
-        
-        GROUP BY monthYear, categ, userId
-        HAVING monthYear = '".$monthYear."'
+                GROUP BY monthYear, categ, nameUser
+                HAVING monthYear = '".$monthYear."'
+                
+                UNION
+                
+                SELECT SUM(TIMEDIFF(ADDTIME(LAST_DAY(t.date_time_start), '24:00:00'), t.date_time_start)) AS nbrTime, CONCAT(MONTH(t.date_time_start), '/', 
+                    YEAR(t.date_time_start)) AS monthYear, tc.id as categ, CONCAT(u.firstname, ' ', u.lastname) as nameUser
+                FROM task t, user u, task_category tc
+                WHERE t.user_id = u.id
+                          AND t.task_category_id = tc.id
+                          AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
+                
+                GROUP BY monthYear, categ, nameUser
+                HAVING monthYear = '".$monthYear."'
+                
+                UNION
+                
+                SELECT SUM(TIMEDIFF(t.date_time_end, ADDTIME(LAST_DAY(t.date_time_start), '24:00:00'))) AS nbrTime, CONCAT(MONTH(t.date_time_end), '/', 
+                    YEAR(t.date_time_end)) AS monthYear, tc.id as categ, CONCAT(u.firstname, ' ', u.lastname) as nameUser
+                FROM task t, user u, task_category tc
+                WHERE t.user_id = u.id
+                          AND t.task_category_id = tc.id
+                          AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
+                
+                GROUP BY monthYear, categ, nameUser
+                HAVING monthYear = '".$monthYear."'
         
             ) AS Stat1
         
-        GROUP BY monthYear, categ, userId
-        ORDER BY monthYear, userId, categ";
+        GROUP BY monthYear, categ, nameUser
+        ORDER BY monthYear, nameUser, categ";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
 
         $result = $statement->fetchAll();
 
-
-
         //Filtrage pour un traitement plus simple
         for($i=0; $i < count($result); $i++){
-            $filterTab[$result[$i]['nameUser']][$result[$i]['teleworked']] = intval($result[$i]['nbrDays']);
+            $nbrTime = strval($result[$i]['nbrTime']);
+            $formatNbrTime = substr($nbrTime, 0, (strlen($nbrTime) - 4) )."h".substr($nbrTime, -4, 2);
+            $tab['data'][$result[$i]['nameUser']][$result[$i]['categ']] = $formatNbrTime;
         }
 
-        $tab = $this->buildTab($filterTab);
-        $tab['titre'] = "02/2021";
+        if(true == isset($tab)){
+            foreach ($tab['data'] as $user => $tabCateg) {
+                for($i=0; $i < count($taskCategory); $i++)
+                {
+                    $idCateg = $taskCategory[$i]->getId();
+                    if(false == isset($tabCateg[$idCateg]))
+                    {
+                        $tab['data'][$user][$idCateg] = "00h00";
+                    }
+                }
+            }
+        }
 
-        return json_encode($tab);
+        $tab['titre'] = "Récapitulatif mensuel cumulé des tâches effectuées par les salariés";
+
+        return $tab;
     }
 }
