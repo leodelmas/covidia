@@ -319,8 +319,10 @@ class StatsRepository extends AbstractController
 
         //Filtrage pour un traitement plus simple
         for($i=0; $i < count($result); $i++){
-            $nbrTime = strval($result[$i]['nbrTime']);
-            $formatNbrTime = substr($nbrTime, 0, (strlen($nbrTime) - 4) )."h".substr($nbrTime, -4, 2);
+            $nbrTime = $result[$i]['nbrTime'];
+            $hours = explode('.', ($nbrTime / 10000) % 100)[0];
+            $minutes = explode('.', ($nbrTime / 100) % 100)[0];
+            $formatNbrTime = $hours."h".$minutes;
             $tab['data'][$result[$i]['nameUser']][$result[$i]['categ']] = $formatNbrTime;
         }
 
@@ -331,7 +333,7 @@ class StatsRepository extends AbstractController
                     $idCateg = $taskCategory[$i]->getId();
                     if(false == isset($tabCateg[$idCateg]))
                     {
-                        $tab['data'][$user][$idCateg] = "00h00";
+                        $tab['data'][$user][$idCateg] = "0h0";
                     }
                 }
             }
