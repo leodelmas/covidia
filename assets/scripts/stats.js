@@ -18,6 +18,9 @@ $(document).ready(function() {
         location.href='?month='+dateTimePickers[0].value;
     });
 
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
     var ctx = document.getElementById('st1');
     var obj = jQuery.parseJSON(ctx.dataset.stat);
 
@@ -29,8 +32,7 @@ $(document).ready(function() {
         },
         options: {
             title: {
-                display: true,
-                text: obj['titre']
+                display: false,
             },
             tooltips: {
                 callbacks: {
@@ -49,6 +51,9 @@ $(document).ready(function() {
             }
         }
     });
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
     var ctx = document.getElementById('st2');
     var obj = jQuery.parseJSON(ctx.dataset.stat);
@@ -61,8 +66,7 @@ $(document).ready(function() {
         },
         options: {
             title: {
-                display: true,
-                text: obj['titre']
+                display: false
             },
             tooltips: {
                 callbacks: {
@@ -82,7 +86,10 @@ $(document).ready(function() {
         }
     });
 
-    var ctx = document.getElementById('st5');
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+    /*var ctx = document.getElementById('st5');
     var obj = jQuery.parseJSON(ctx.dataset.stat);
 
     var st2 = new Chart(ctx, {
@@ -93,8 +100,7 @@ $(document).ready(function() {
         },
         options: {
             title: {
-                display: true,
-                text: obj['titre']
+                display: false
             },
             tooltips: {
                 callbacks: {
@@ -112,6 +118,5 @@ $(document).ready(function() {
                 }]
             }
         }
-    });
-
+    });*/
 });

@@ -49,6 +49,7 @@ class StatsController extends AbstractController
             'stat1' => $stats->req1($month),
             'stat2' => $stats->req2($month),
             'stat3' => $stats->req3($month, $tasksCategory),
+            'stat4' => $stats->req4($month),
             'stat5' => $stats->req5($month),
             'tcategs' => $tasksCategory, //Use with Stat3
         ]);

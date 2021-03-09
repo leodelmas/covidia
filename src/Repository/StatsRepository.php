@@ -128,7 +128,6 @@ class StatsRepository extends AbstractController
         $tab = array();
         if(true == isset($filterTab)){
             $tab = $this->buildTab($filterTab);
-            $tab['titre'] = "Temps de travail en télétravail ou présentiel / salarié";
         }
 
         return json_encode($tab);
@@ -195,7 +194,6 @@ class StatsRepository extends AbstractController
         $tab = array();
         if(true == isset($filterTab)){
             $tab = $this->buildTab($filterTab);
-            $tab['titre'] = "Temps de travail en présentiel ou télétravail / salarié cadre ou non";
         }
 
         return json_encode($tab);
@@ -258,7 +256,6 @@ class StatsRepository extends AbstractController
         $tab = array();
         if(true == isset($filterTab)){
             $tab = $this->buildTab($filterTab);
-            $tab['titre'] = "Pourcentage des périodes passées en télétravail ou en présentiel par salariés";
         }
 
         return json_encode($tab);
@@ -316,6 +313,7 @@ class StatsRepository extends AbstractController
         $statement->execute();
 
         $result = $statement->fetchAll();
+        $tab = array();
 
         //Filtrage pour un traitement plus simple
         for($i=0; $i < count($result); $i++){
@@ -326,7 +324,7 @@ class StatsRepository extends AbstractController
             $tab['data'][$result[$i]['nameUser']][$result[$i]['categ']] = $formatNbrTime;
         }
 
-        if(true == isset($tab)){
+        if(true == isset($tab['data'])){
             foreach ($tab['data'] as $user => $tabCateg) {
                 for($i=0; $i < count($taskCategory); $i++)
                 {
@@ -339,7 +337,56 @@ class StatsRepository extends AbstractController
             }
         }
 
-        $tab['titre'] = "Récapitulatif mensuel cumulé des tâches effectuées par les salariés";
+        return $tab;
+    }
+
+    /**
+     * D’avoir une moyenne d’âge mensuelle des personnes en télétravail et en présentiel.
+     */
+    public function req4(string $monthYear)
+    {
+        $RAW_QUERY="
+        SELECT ROUND(AVG(TIMESTAMPDIFF(year,u.birth_date, CURRENT_DATE ))) AS MoyAge, wt.is_teleworked as teleworked
+        FROM task t, user u, work_time wt
+        WHERE t.user_id = u.id
+            AND t.work_time_id = wt.id
+            AND (
+                CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) = '".$monthYear."'
+                OR
+                CONCAT(MONTH(t.date_time_end), '/', YEAR(t.date_time_end)) = '".$monthYear."'
+            )
+            
+            GROUP BY teleworked";
+
+        $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+
+        $result = $statement->fetchAll();
+        $tab = array();
+
+        if(count($result) < 1)
+        {
+            return $tab;
+        }
+
+        //Filtrage pour un traitement plus simple
+        for($i=0; $i < count($result); $i++){
+            if($result[$i]['teleworked'] == 1)
+            {
+                $moyAgeTele = $result[$i]['MoyAge'];
+            }else
+            {
+                $moyAge = $result[$i]['MoyAge'];
+            }
+        }
+
+        if(isset($moyAgeTele) == false)
+            $moyAgeTele = 0;
+        if(isset($moyAge) == false)
+            $moyAge = 0;
+
+        $tab['moyAgeTele'] = $moyAgeTele;
+        $tab['moyAge'] = $moyAge;
 
         return $tab;
     }
