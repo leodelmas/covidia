@@ -265,7 +265,7 @@ class StatsRepository extends AbstractController
      * D’avoir un récapitulatif mensuel cumulé des tâches effectuées par un salarié.
      * Ce récapitulatif devra être sous le format suivant : Catégorie – Temps passé. Le détail des « commentaires » ne devra pas apparaître
      */
-    public function req3(string $monthYear, $taskCategory)
+    public function req3(string $monthYear, $taskCategory, int $idUser = null)
     {
         $RAW_QUERY="
         SELECT Stat1.nameUser as nameUser, Stat1.monthYear AS monthYear, Stat1.categ as categ, SUM(Stat1.nbrTime) AS nbrTime
@@ -276,6 +276,7 @@ class StatsRepository extends AbstractController
                  WHERE t.user_id = u.id
                            AND t.task_category_id = tc.id
                            AND MONTH(t.date_time_start) = MONTH(t.date_time_end)
+                            ".(($idUser != null) ? "AND u.id ='".$idUser."'" : "")."
         
                 GROUP BY monthYear, categ, nameUser
                 HAVING monthYear = '".$monthYear."'
@@ -288,6 +289,7 @@ class StatsRepository extends AbstractController
                 WHERE t.user_id = u.id
                           AND t.task_category_id = tc.id
                           AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
+                          ".(($idUser != null) ? "AND u.id ='".$idUser."'" : "")."
                 
                 GROUP BY monthYear, categ, nameUser
                 HAVING monthYear = '".$monthYear."'
@@ -300,6 +302,7 @@ class StatsRepository extends AbstractController
                 WHERE t.user_id = u.id
                           AND t.task_category_id = tc.id
                           AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
+                          ".(($idUser != null) ? "AND u.id ='".$idUser."'" : "")."
                 
                 GROUP BY monthYear, categ, nameUser
                 HAVING monthYear = '".$monthYear."'
@@ -314,6 +317,8 @@ class StatsRepository extends AbstractController
 
         $result = $statement->fetchAll();
         $tab = array();
+
+        dump($RAW_QUERY);
 
         //Filtrage pour un traitement plus simple
         for($i=0; $i < count($result); $i++){

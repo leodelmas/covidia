@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\StatsRepository;
+use App\Repository\TaskCategoryRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -92,9 +94,15 @@ class UserController extends AbstractController {
      * @param Security $security
      * @return Response
      */
-    public function profile(Security $security): Response {
+    public function profile(Security $security, StatsRepository $stats, TaskCategoryRepository $taskCategoryRepository): Response {
+        $stats->setObjectManager($this->getDoctrine()->getManager());
+
+        $tasksCategory = $taskCategoryRepository->findAll();
+
         return $this->render('pages/user/profile.html.twig', [
             'user' => $security->getUser(),
+            'stat3' => $stats->req3(date("n/Y"), $tasksCategory, $security->getUser()->getId()),
+            'tcategs' => $tasksCategory,
         ]);
     }
 }
