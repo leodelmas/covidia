@@ -3,19 +3,54 @@
 namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
+/**
+ * @ORM\Entity(repositoryClass=SosRepository::class)
+ */
 class Sos {
 
     /**
-     * @var string
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=50)
      * @Assert\Length(min=5, max=50)
+     * @Assert\NotBlank()
      */
     private $message;
 
     /**
-     * @var User
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAnonymous;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isClosed;
+
+    public function __construct()
+    {
+        $this->isClosed = false;
+    }
+
+    public function getId(): ?int {
+        return $this->id;
+    }
 
     /**
      * @return string
@@ -46,6 +81,24 @@ class Sos {
      */
     public function setUser(User $user): Sos {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getIsAnonymous(): ?bool {
+        return $this->isAnonymous;
+    }
+
+    public function setIsAnonymous(bool $isAnonymous): self {
+        $this->isAnonymous = $isAnonymous;
+        return $this;
+    }
+
+    public function getIsClosed(): ?bool {
+        return $this->isClosed;
+    }
+
+    public function setIsClosed(bool $isClosed): self {
+        $this->isClosed = $isClosed;
         return $this;
     }
 }

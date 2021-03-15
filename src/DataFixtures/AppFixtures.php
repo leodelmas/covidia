@@ -39,6 +39,7 @@ class AppFixtures extends Fixture
             ->setHiringDate(new \DateTime())
             ->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'))
             ->setIsExecutive(false)
+            ->setIsPsychologist(false)
             ->setIsAdmin(true)
             ->setJob($job);
         $manager->persist($admin);

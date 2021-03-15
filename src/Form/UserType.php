@@ -28,6 +28,7 @@ class UserType extends AbstractType
             ->add('email')
             ->add('phone')
             ->add('isExecutive')
+            ->add('isPsychologist')
             ->add('isAdmin')
             ->add('job', EntityType::class, [
                 'class' => Job::class,

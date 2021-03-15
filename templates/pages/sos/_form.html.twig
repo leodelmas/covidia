@@ -3,10 +3,13 @@
     <div class="col-md-12 mb-3">
         {{ form_row(form.message) }}
     </div>
+    <div class="col-md-12 mb-3">
+        {{ form_row(form.isAnonymous) }}
+    </div>
 </div>
 {{ form_widget(form) }}
 <div class="d-flex justify-content-between">
-    <a href="{{ path('home') }}" class="btn btn-secondary">Retour</a>
+    <a href="{{ path('planning.index') }}" class="btn btn-secondary">Retour</a>
     <button class="btn btn-primary">Envoyer</button>
 </div>
 {{ form_end(form) }}

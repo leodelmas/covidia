@@ -14,13 +14,15 @@ class SosType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', TextareaType::class);
+            ->add('message', TextareaType::class)
+            ->add('isAnonymous');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Sos::class,
+            'translation_domain' => 'Sos.forms',
         ]);
     }
 }

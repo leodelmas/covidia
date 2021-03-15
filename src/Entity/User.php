@@ -76,6 +76,11 @@ class User implements UserInterface,\Serializable
     /**
      * @ORM\Column(type="boolean")
      */
+    private $isPsychologist;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $isAdmin;
 
     /**
@@ -173,6 +178,15 @@ class User implements UserInterface,\Serializable
 
     public function setIsExecutive(bool $isExecutive): self {
         $this->isExecutive = $isExecutive;
+        return $this;
+    }
+
+    public function getIsPsychologist(): ?bool {
+        return $this->isPsychologist;
+    }
+
+    public function setIsPsychologist(bool $isPsychologist): self {
+        $this->isPsychologist = $isPsychologist;
         return $this;
     }
 

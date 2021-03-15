@@ -29,6 +29,10 @@ class SosController extends AbstractController {
         if($form->isSubmitted() && $form->isValid()){
             $notification->notify($sos);
             $this->addFlash('success', 'Votre message SOS a bien été envoyé.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($sos);
+            $entityManager->flush();
+            return $this->redirectToRoute('planning.index');
         }
 
         return $this->render('pages/sos/index.html.twig', [
