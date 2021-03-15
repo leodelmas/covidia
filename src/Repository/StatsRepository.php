@@ -87,7 +87,7 @@ class StatsRepository extends AbstractController
                            AND MONTH(t.date_time_start) = MONTH(t.date_time_end)
         
                 GROUP BY monthYear, nameUser, teleworked
-                HAVING monthYear = '".$monthYear."'
+                HAVING monthYear = :monthYear
         
                 UNION
                 
@@ -98,7 +98,7 @@ class StatsRepository extends AbstractController
                           AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
                 
                 GROUP BY monthYear, nameUser, teleworked
-                HAVING monthYear = '".$monthYear."'
+                HAVING monthYear = :monthYear
                 
                 UNION
                 
@@ -109,14 +109,16 @@ class StatsRepository extends AbstractController
                           AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
                 
                 GROUP BY monthYear, nameUser, teleworked
-                HAVING monthYear = '".$monthYear."'
+                HAVING monthYear = :monthYear
             ) AS Stat1
         
         GROUP BY monthYear, nameUser, teleworked
         ORDER BY monthYear, nameUser, teleworked";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue("monthYear", $monthYear, "string");
         $statement->execute();
+
 
         $result = $statement->fetchAll();
 
@@ -148,7 +150,7 @@ class StatsRepository extends AbstractController
                 AND MONTH(t.date_time_start) = MONTH(t.date_time_end)
         
             GROUP BY monthYear, executive, teleworked
-            HAVING monthYear = '".$monthYear."'
+            HAVING monthYear = :monthYear
         
             UNION
         
@@ -159,7 +161,7 @@ class StatsRepository extends AbstractController
                 AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
         
             GROUP BY monthYear, executive, teleworked
-            HAVING monthYear = '".$monthYear."'
+            HAVING monthYear = :monthYear
         
             UNION
         
@@ -170,13 +172,14 @@ class StatsRepository extends AbstractController
                 AND MONTH(t.date_time_start) <> MONTH(t.date_time_end)
         
             GROUP BY monthYear, executive, teleworked
-            HAVING monthYear = '".$monthYear."'
+            HAVING monthYear = :monthYear
             ) AS Stat1
         
         GROUP BY monthYear, executive, teleworked
         ";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue("monthYear", $monthYear, "string");
         $statement->execute();
 
         $result = $statement->fetchAll();
@@ -214,7 +217,7 @@ class StatsRepository extends AbstractController
                    AND user_id = user.id
         
                  GROUP BY is_teleworked, monthYear, nameUser
-                 HAVING monthYear = '".$monthYear."'
+                 HAVING monthYear = :monthYear
         
                  UNION
         
@@ -225,7 +228,7 @@ class StatsRepository extends AbstractController
                    AND user_id = user.id
         
                  GROUP BY is_teleworked, monthYear, nameUser
-                 HAVING monthYear = '".$monthYear."'
+                 HAVING monthYear = :monthYear
         
                  UNION
         
@@ -236,7 +239,7 @@ class StatsRepository extends AbstractController
                    AND user_id = user.id
         
                  GROUP BY is_teleworked, monthYear, nameUser
-                 HAVING monthYear = '".$monthYear."'
+                 HAVING monthYear = :monthYear
         
              ) as Stat1
         
@@ -244,6 +247,7 @@ class StatsRepository extends AbstractController
         ORDER BY Stat1.monthYear, Stat1.teleworked, Stat1.nameUser";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue("monthYear", $monthYear, "string");
         $statement->execute();
 
         $result = $statement->fetchAll();
@@ -279,7 +283,7 @@ class StatsRepository extends AbstractController
                             ".(($idUser != null) ? "AND u.id ='".$idUser."'" : "")."
         
                 GROUP BY monthYear, categ, nameUser
-                HAVING monthYear = '".$monthYear."'
+                HAVING monthYear = :monthYear
                 
                 UNION
                 
@@ -292,7 +296,7 @@ class StatsRepository extends AbstractController
                           ".(($idUser != null) ? "AND u.id ='".$idUser."'" : "")."
                 
                 GROUP BY monthYear, categ, nameUser
-                HAVING monthYear = '".$monthYear."'
+                HAVING monthYear = :monthYear
                 
                 UNION
                 
@@ -305,7 +309,7 @@ class StatsRepository extends AbstractController
                           ".(($idUser != null) ? "AND u.id ='".$idUser."'" : "")."
                 
                 GROUP BY monthYear, categ, nameUser
-                HAVING monthYear = '".$monthYear."'
+                HAVING monthYear = :monthYear
         
             ) AS Stat1
         
@@ -313,12 +317,11 @@ class StatsRepository extends AbstractController
         ORDER BY monthYear, nameUser, categ";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue("monthYear", $monthYear, "string");
         $statement->execute();
 
         $result = $statement->fetchAll();
         $tab = array();
-
-        dump($RAW_QUERY);
 
         //Filtrage pour un traitement plus simple
         for($i=0; $i < count($result); $i++){
@@ -356,14 +359,15 @@ class StatsRepository extends AbstractController
         WHERE t.user_id = u.id
             AND t.work_time_id = wt.id
             AND (
-                CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) = '".$monthYear."'
+                CONCAT(MONTH(t.date_time_start), '/', YEAR(t.date_time_start)) = :monthYear
                 OR
-                CONCAT(MONTH(t.date_time_end), '/', YEAR(t.date_time_end)) = '".$monthYear."'
+                CONCAT(MONTH(t.date_time_end), '/', YEAR(t.date_time_end)) = :monthYear
             )
             
             GROUP BY teleworked";
 
         $statement = $this->objectManager->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue("monthYear", $monthYear, "string");
         $statement->execute();
 
         $result = $statement->fetchAll();
