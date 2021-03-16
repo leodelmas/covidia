@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Repository\StatsRepository;
 use App\Repository\TaskCategoryRepository;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,12 +18,20 @@ class UserController extends AbstractController {
 
     /**
      * @Route("/admin/users", name="user.index", methods={"GET"})
+     * @param PaginatorInterface $paginator
      * @param UserRepository $userRepository
+     * @param Request $request
      * @return Response
      */
-    public function index(UserRepository $userRepository): Response {
+    public function index(PaginatorInterface $paginator, UserRepository $userRepository, Request $request): Response {
+        $users = $paginator->paginate(
+            $userRepository->findAll(),
+            $request->query->getInt('page', 1),
+            1
+        );
+
         return $this->render('pages/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
         ]);
     }
 
@@ -92,6 +101,8 @@ class UserController extends AbstractController {
     /**
      * @Route("/profile", name="user.profile", methods={"GET"})
      * @param Security $security
+     * @param StatsRepository $stats
+     * @param TaskCategoryRepository $taskCategoryRepository
      * @return Response
      */
     public function profile(Security $security, StatsRepository $stats, TaskCategoryRepository $taskCategoryRepository): Response {
