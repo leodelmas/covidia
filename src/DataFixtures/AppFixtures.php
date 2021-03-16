@@ -41,6 +41,7 @@ class AppFixtures extends Fixture
             ->setIsExecutive(false)
             ->setIsPsychologist(false)
             ->setIsAdmin(true)
+            ->setIsPsychologist(true)
             ->setJob($job);
         $manager->persist($admin);
 
@@ -54,6 +55,7 @@ class AppFixtures extends Fixture
             ->setHiringDate(new \DateTime())
             ->setPassword($this->passwordEncoder->encodePassword($user, 'user'))
             ->setIsExecutive(true)
+            ->setIsPsychologist(false)
             ->setIsAdmin(false)
             ->setJob($job);
 
