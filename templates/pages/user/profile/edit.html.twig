@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+    <div class="container mt-4 pt-4">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
+                                 class="rounded-circle" width="150">
+                            <div class="mt-3">
+                                <h4 class="text-capitalize">{{ user.firstname }} {{ user.lastname }}</h4>
+                                <p class="text-secondary mb-1">{{ user.job.name }}{% if user.isExecutive %} - Cadre{% endif %}{% if user.isAdmin %} - Admin{% endif %}{% if user.isPsychologist %} - Psychologue{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 font-weight-bold">Nom</p>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ form_row(form.firstname) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 font-weight-bold">Prénom</p>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ form_row(form.lastname) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 font-weight-bold">E-mail</p>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ form_row(form.email) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 font-weight-bold">Téléphone</p>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ form_row(form.phone) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 font-weight-bold">Date d'anniversaire</p>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ form_row(form.birthDate) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0 font-weight-bold">Mot de passe</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ form_row(form.password) }}
+                            </div>
+                        </div>
+                        {{ form_rest(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

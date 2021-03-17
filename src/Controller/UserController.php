@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ProfileType;
 use App\Form\UserType;
 use App\Repository\StatsRepository;
 use App\Repository\TaskCategoryRepository;
@@ -110,10 +111,31 @@ class UserController extends AbstractController {
 
         $tasksCategory = $taskCategoryRepository->findAll();
 
-        return $this->render('pages/user/profile.html.twig', [
+        return $this->render('pages/user/profile/show.html.twig', [
             'user' => $security->getUser(),
             'stat3' => $stats->req3(date("n/Y"), $tasksCategory, $security->getUser()->getId()),
             'tcategs' => $tasksCategory,
+        ]);
+    }
+
+    /**
+     * @Route("/profile/edit", name="user.profile.edit", methods={"GET"})
+     * @param Security $security
+     * @param Request $request
+     * @return Response
+     */
+    public function editProfile(Security $security, Request $request): Response {
+        $form = $this->createForm(ProfileType::class, $security->getUser());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('user.profile');
+        }
+
+        return $this->render('pages/user/profile/edit.html.twig', [
+            'user' => $security->getUser(),
+            'form' => $form->createView(),
         ]);
     }
 }

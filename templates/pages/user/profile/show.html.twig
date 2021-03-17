@@ -2,15 +2,11 @@
 
 {% block title %}Profil{% endblock %}
 
-{% block stylesheets %}
-    {{ encore_entry_link_tags('profile') }}
-{% endblock %}
-
 {% block body %}
     <div class="container mt-4 pt-4">
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-md-4">
-                <div class="card">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
                             <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
@@ -18,14 +14,14 @@
                             <div class="mt-3">
                                 <h4 class="text-capitalize">{{ user.firstname }} {{ user.lastname }}</h4>
                                 <p class="text-secondary mb-1">{{ user.job.name }}{% if user.isExecutive %} - Cadre{% endif %}{% if user.isAdmin %} - Admin{% endif %}{% if user.isPsychologist %} - Psychologue{% endif %}</p>
-                                <a href="#"><i class="fas fa-edit"></i></a>
+                                <a href="{{ path('user.profile.edit') }}"><i class="fas fa-edit"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
@@ -77,7 +73,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-3">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <p class="font-weight-bold">Statistiques</p>
                         <hr>
