@@ -119,7 +119,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/profile/edit", name="user.profile.edit", methods={"GET"})
+     * @Route("/profile/edit", name="user.profile.edit", methods={"GET","POST"})
      * @param Security $security
      * @param Request $request
      * @return Response

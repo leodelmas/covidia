@@ -77,6 +77,10 @@
                             </div>
                         </div>
                         {{ form_rest(form) }}
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('user.profile') }}" class="btn btn-secondary"><i class="fas fa-long-arrow-alt-left"></i></a>
+                            <button class="btn btn-primary">Enregistrer</button>
+                        </div>
                         {{ form_end(form) }}
                     </div>
                 </div>

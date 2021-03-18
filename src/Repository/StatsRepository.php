@@ -339,7 +339,7 @@ class StatsRepository extends AbstractController
                     $idCateg = $taskCategory[$i]->getId();
                     if(false == isset($tabCateg[$idCateg]))
                     {
-                        $tab['data'][$user][$idCateg] = "0h0";
+                        $tab['data'][$user][$idCateg] = "--";
                     }
                 }
             }
