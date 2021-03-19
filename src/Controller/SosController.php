@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Sos;
 use App\Form\SosType;
 use App\Notification\SosNotification;
+use App\Repository\SosRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,5 +40,65 @@ class SosController extends AbstractController {
         return $this->render('pages/sos/index.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/sos/list", name="sos.list")
+     * @param Request $request
+     * @param Security $security
+     * @param SosNotification $notification
+     * @return Response
+     */
+    public function list(Security $security, PaginatorInterface $paginator, Request $request, SosRepository $sosRepository): Response
+    {
+        if(false == $security->getUser()->getIsPsychologist())
+        {
+            return $this->redirectToRoute('planning.index');
+        }
+        
+        $soss = $paginator->paginate(
+            $sosRepository->findBy(
+                array('isClosed' => 0)
+            ),
+            $request->query->getInt('page', 1),
+            20
+        );
+
+        return $this->render('pages/sos/list.html.twig', [
+            'soss' => $soss
+        ]);
+    }
+
+    /**
+     * @Route("/sos/{id}", name="sos.delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Sos $sos
+     * @return Response
+     */
+    public function delete(Request $request, Sos $sos): Response {
+        if ($this->isCsrfTokenValid('delete'.$sos->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($sos);
+            $entityManager->flush();
+            $this->addFlash('success', 'SOS supprimé avec succès !');
+        }
+
+        return $this->redirectToRoute('sos.list');
+    }
+
+    /**
+     * @Route("/sos/{id}", name="sos.close", methods={"CLOSE"})
+     * @param Request $request
+     * @param Sos $sos
+     * @return Response
+     */
+    public function close(Request $request, Sos $sos): Response {
+        if ($this->isCsrfTokenValid('close'.$sos->getId(), $request->request->get('_token'))) {
+            $sos->setIsClosed(true);
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'SOS fermé avec succès !');
+        }
+
+        return $this->redirectToRoute('sos.list');
     }
 }
