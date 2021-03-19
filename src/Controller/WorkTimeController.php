@@ -6,6 +6,7 @@ use App\Entity\WorkTime;
 use App\Form\WorkTimeType;
 use App\Repository\WorkTimeRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +24,16 @@ class WorkTimeController extends AbstractController {
      * @param Security $security
      * @return Response
      */
-    public function index(WorkTimeRepository $workTimeRepository, Security $security): Response {
+    public function index(PaginatorInterface $paginator, WorkTimeRepository $workTimeRepository, Security $security, Request $request): Response
+    {
+        $workTimes = $paginator->paginate(
+            $workTimeRepository->findAllByUser($security->getUser()->getId()),
+            $request->query->getInt('page', 1),
+            20
+        );
+
         return $this->render('pages/planning/workTime/index.html.twig', [
-            'workTimes' => $workTimeRepository->findAllByUser($security->getUser()->getId()),
+            'workTimes' => $workTimes,
         ]);
     }
 

@@ -45,7 +45,9 @@
     </table>
     <div class="d-flex justify-content-between">
         <a href="{{ path('task_category.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
-        {{ include('pages/_partials/pagination.html.twig') }}
+        <div class="pagination">
+            {{ knp_pagination_render(task_categories) }}
+        </div>
     </div>
 </div>
    

@@ -37,7 +37,9 @@
         </table>
         <div class="d-flex justify-content-between">
             <a href="{{ path('planning.index') }}" class="btn btn-secondary"><i class="fas fa-long-arrow-alt-left"></i></a>
-            {{ include('pages/_partials/pagination.html.twig') }}
+            <div class="pagination">
+                {{ knp_pagination_render(tasks) }}
+            </div>
             <a href="{{ path('task.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
         </div>
     </div>

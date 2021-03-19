@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\TaskCategory;
 use App\Form\TaskCategoryType;
 use App\Repository\TaskCategoryRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,10 +21,16 @@ class TaskCategoryController extends AbstractController
      * @param TaskCategoryRepository $taskCategoryRepository
      * @return Response
      */
-    public function index(TaskCategoryRepository $taskCategoryRepository): Response
+    public function index(PaginatorInterface $paginator, TaskCategoryRepository $taskCategoryRepository, Request $request): Response
     {
+        $task_categories = $paginator->paginate(
+            $taskCategoryRepository->findAll(),
+            $request->query->getInt('page', 1),
+            20
+        );
+
         return $this->render('pages/task_category/index.html.twig', [
-            'task_categories' => $taskCategoryRepository->findAll(),
+            'task_categories' => $task_categories,
         ]);
     }
 

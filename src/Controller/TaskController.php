@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/planning/task")
@@ -24,9 +25,16 @@ class TaskController extends AbstractController
      * @param Security $security
      * @return Response
      */
-    public function index(TaskRepository $taskRepository, Security $security): Response {
+    public function index(PaginatorInterface $paginator, TaskRepository $taskRepository, Security $security, Request $request): Response
+    {
+        $tasks = $paginator->paginate(
+            $taskRepository->findAllByUser($security->getUser()->getId()),
+            $request->query->getInt('page', 1),
+            20
+        );
+
         return $this->render('pages/planning/task/index.html.twig', [
-            'tasks' => $taskRepository->findAllByUser($security->getUser()->getId()),
+            'tasks' => $tasks,
         ]);
     }
 

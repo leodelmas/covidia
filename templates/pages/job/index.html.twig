@@ -40,7 +40,9 @@
         </table>
         <div class="d-flex justify-content-between">
             <a href="{{ path('job.new') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
-            {{ include('pages/_partials/pagination.html.twig') }}
+            <div class="pagination">
+                {{ knp_pagination_render(jobs) }}
+            </div>
         </div>
     </div>
 {% endblock %}
