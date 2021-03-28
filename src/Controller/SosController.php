@@ -44,9 +44,10 @@ class SosController extends AbstractController {
 
     /**
      * @Route("/sos/list", name="sos.list")
-     * @param Request $request
      * @param Security $security
-     * @param SosNotification $notification
+     * @param PaginatorInterface $paginator
+     * @param Request $request
+     * @param SosRepository $sosRepository
      * @return Response
      */
     public function list(Security $security, PaginatorInterface $paginator, Request $request, SosRepository $sosRepository): Response

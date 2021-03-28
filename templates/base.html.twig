@@ -30,12 +30,8 @@
                     </li>
                 {% endif %}
                 {% if app.user.isPsychologist %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Psychologue</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                            <a class="dropdown-item" href="{{ path('sos.list') }}">Liste</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('sos.list') }}">Psychologue</a>
                     </li>
                 {% endif %}
             </ul>
