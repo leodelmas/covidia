@@ -26,5 +26,5 @@ security:
                 entry_point: App\Security\LoginAuthenticator
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/(login|validation), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(login|validation|reset-password), roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
