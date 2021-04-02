@@ -2,17 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Job;
+use App\Entity\Task;
+use App\Entity\WorkTime;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints\NotBlank;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface; 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @Vich\Uploadable()
  */
 class User implements UserInterface,\Serializable
 {
@@ -22,6 +27,22 @@ class User implements UserInterface,\Serializable
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @var File|null
+     * @Assert\Image(
+     *      mimeTypes="image/jpeg"
+     * )
+     * @Vich\UploadableField(mapping="user_image", fileNameProperty="fileName")
+     */
+    private $imageFile;
+
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updated_at;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -98,6 +119,11 @@ class User implements UserInterface,\Serializable
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user", orphanRemoval=true)
      */
     private $tasks;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $file_name;
 
     public function __construct()
     {
@@ -248,6 +274,40 @@ class User implements UserInterface,\Serializable
         return $this;
     }
 
+
+
+    
+    public function getFileName(): ?string
+    {
+        return $this->file_name;
+    }
+
+    
+    public function setFileName(?string $file_name): User
+    {
+        $this->file_name = $file_name;
+        return $this;
+    }
+
+    /**
+     *
+     * @param null|File $imageFile
+     * @return Property
+     */
+    public function setImageFile(?File $imageFile = null): User
+    {
+        $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updated_at = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
     /**
      * @return Collection|WorkTime[]
      */
@@ -307,4 +367,17 @@ class User implements UserInterface,\Serializable
 
         return $this;
     }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+    
 }

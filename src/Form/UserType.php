@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
@@ -34,6 +35,9 @@ class UserType extends AbstractType
                 'class' => Job::class,
                 'required' => true,
                 'choice_label' => 'name'
+            ])
+            ->add('imageFile',FileType::class,[
+                'required' => false
             ]);
     }
 
