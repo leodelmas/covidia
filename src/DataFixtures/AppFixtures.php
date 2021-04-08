@@ -32,73 +32,15 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $jobs = $this->create_Jobs($manager);
-
-        $admin = new User();
-        $admin
-            ->setFirstname('admin')
-            ->setLastname('admin')
-            ->setEmail('admin@admin.admin')
-            ->setPhone('0000000000')
-            ->setBirthDate(new \DateTime())
-            ->setHiringDate(new \DateTime())
-            ->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'))
-            ->setIsExecutive(false)
-            ->setIsPsychologist(false)
-            ->setIsAdmin(true)
-            ->setIsPsychologist(true)
-            ->setJob($jobs[0]);
-        $manager->persist($admin);
-
-        $user = new User();
-        $user
-            ->setFirstname('user')
-            ->setLastname('user')
-            ->setEmail('user@user.user')
-            ->setPhone('0000000000')
-            ->setBirthDate(new \DateTime())
-            ->setHiringDate(new \DateTime())
-            ->setPassword($this->passwordEncoder->encodePassword($user, 'user'))
-            ->setIsExecutive(true)
-            ->setIsPsychologist(false)
-            ->setIsAdmin(false)
-            ->setJob($jobs[0]);
-
-        $manager->persist($user);
-        $manager->flush();
-
-        $typeTache = new TaskCategory();
-        $typeTache
-            ->setName('Commercial')
-            ->setIsRemote(false)
-            ->setIsPhysical(true)
-            ->setColor('#F7AF00');
-        $manager->persist($typeTache);
-        $manager->flush();
-
-        $typeTache2 = new TaskCategory();
-        $typeTache2
-            ->setName('Réunion externe en vidéoconférence')
-            ->setIsRemote(true)
-            ->setIsPhysical(false)
-            ->setColor('#748E54');
-        $manager->persist($typeTache2);
-        $manager->flush();
-
-        $typeTache3 = new TaskCategory();
-        $typeTache3
-            ->setName('Maintenance')
-            ->setIsRemote(true)
-            ->setIsPhysical(true)
-            ->setColor('#DECAF1');
-        $manager->persist($typeTache3);
-        $manager->flush();
+        $users = $this->create_Users($manager, $jobs);
+        $tasks = $this->create_Tasks($manager);
 
         $worktime = new WorkTime();
         $worktime 
             ->setDateStart(new DateTime('2021-02-01'))
             ->setDateEnd(new DateTime('2021-02-05'))
             ->setIsTeleworked(true)
-            ->setUser($user);
+            ->setUser($users[1]);
         $manager->persist($worktime);
         $manager->flush();
 
@@ -107,13 +49,91 @@ class AppFixtures extends Fixture
             ->setDateTimeStart(new DateTime('2021-02-01 08:30'))
             ->setDateTimeEnd(new DateTime('2021-02-01 10:30'))
             ->setWorkTime($worktime)
-            ->setUser($user)
-            ->setTaskCategory($typeTache2)
+            ->setUser($users[1])
+            ->setTaskCategory($tasks[1])
             ->setComment("Je suis le test de l'ajout d'une catégorie");
         $manager->persist($task);
         $manager->flush();
+    }
 
-        $this->create_Users($manager, $jobs);
+    private function create_Tasks(ObjectManager $manager)
+    {
+        $tasks = array();
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Sécuriser')
+            ->setIsRemote(false)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Réunion externe en vidéoconférence')
+            ->setIsRemote(true)
+            ->setIsPhysical(false)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Maintenance')
+            ->setIsRemote(true)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Développement')
+            ->setIsRemote(true)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Nettoyage')
+            ->setIsRemote(false)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Nettoyage')
+            ->setIsRemote(false)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Designer')
+            ->setIsRemote(true)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Dessiner')
+            ->setIsRemote(true)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        array_push($tasks, new TaskCategory());
+        $tasks[count($tasks) - 1]
+            ->setName('Formation')
+            ->setIsRemote(true)
+            ->setIsPhysical(true)
+            ->setColor($this->faker->hexColor);
+        $manager->persist( $tasks[count($tasks) - 1]);
+
+        $manager->flush();
+        return $tasks;
     }
 
     private function create_Jobs(ObjectManager $manager)
@@ -148,27 +168,65 @@ class AppFixtures extends Fixture
 
     private function create_Users(ObjectManager $manager, Array $jobs)
     {
+        $users = array();
+
+        array_push($users, new User());
+        $users[0]
+            ->setFirstname('admin')
+            ->setLastname('admin')
+            ->setEmail('admin@admin.admin')
+            ->setPhone('0000000000')
+            ->setBirthDate(new \DateTime())
+            ->setHiringDate(new \DateTime())
+            ->setPassword($this->passwordEncoder->encodePassword($users[0], 'admin'))
+            ->setIsExecutive(false)
+            ->setIsPsychologist(false)
+            ->setIsAdmin(true)
+            ->setIsPsychologist(true)
+            ->setJob($jobs[0]);
+        $manager->persist($users[0]);
+
+        array_push($users, new User());
+        $users[1]
+            ->setFirstname('user')
+            ->setLastname('user')
+            ->setEmail('user@user.user')
+            ->setPhone('0000000000')
+            ->setBirthDate(new \DateTime())
+            ->setHiringDate(new \DateTime())
+            ->setPassword($this->passwordEncoder->encodePassword($users[1], 'user'))
+            ->setIsExecutive(true)
+            ->setIsPsychologist(false)
+            ->setIsAdmin(false)
+            ->setJob($jobs[0]);
+        $manager->persist($users[1]);
+
         for ($i = 0; $i < 30; $i++) {
             $phoneNumber = str_replace(" ","",$this->faker->phoneNumber);
             $phoneNumber = str_replace("+33", "0", $phoneNumber);
             $phoneNumber = str_replace("(0)", "", $phoneNumber);
 
-            $user = new User();
-            $user
+            array_push($users, new User());
+            $users[count($users) - 1]
                 ->setFirstname($this->faker->firstName)
                 ->setLastname($this->faker->lastName)
-                ->setEmail(strtr( $user->getFirstname(), $this->unwanted_array ).'@'.strtr( $user->getFirstname(), $this->unwanted_array ).'.'.strtr( $user->getFirstname(), $this->unwanted_array ))
+                ->setEmail(
+                    strtr( $users[count($users) - 1]->getFirstname(), $this->unwanted_array ).'@'.
+                    strtr( $users[count($users) - 1]->getFirstname(), $this->unwanted_array ).'.'.
+                    strtr( $users[count($users) - 1]->getFirstname(), $this->unwanted_array ))
                 ->setPhone($phoneNumber)
                 ->setBirthDate($this->faker->dateTimeBetween('-60 years', '-20 years'))
                 ->setHiringDate($this->faker->dateTimeBetween('-20 years', 'now'))
-                ->setPassword($this->passwordEncoder->encodePassword($user, strtr( $user->getFirstname(), $this->unwanted_array )))
+                ->setPassword($this->passwordEncoder->encodePassword($users[count($users) - 1], strtr( $users[count($users) - 1]->getFirstname(), $this->unwanted_array )))
                 ->setIsExecutive($this->faker->boolean)
                 ->setIsPsychologist($this->faker->boolean)
                 ->setIsAdmin(false)
                 ->setJob($jobs[$this->faker->numberBetween(0, (count($jobs) - 1) )]);
 
-            $manager->persist($user);
-            $manager->flush();
+            $manager->persist($users[count($users) - 1]);
         }
+
+        $manager->flush();
+        return $users;
     }
 }
