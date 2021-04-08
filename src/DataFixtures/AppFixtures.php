@@ -120,13 +120,28 @@ class AppFixtures extends Fixture
     {
         $jobs = array();
 
-        $job = new Job();
-        $job
-            ->setName("Développeur");
-        $manager->persist($job);
-        $manager->flush();
+        array_push($jobs, (new Job())->setName("Développeur"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Secrétaire"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Stagiaire"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Graphiste"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Web designer"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Formateur"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Chef de projet"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Avocat"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Agent de Nettoyage"));
+        $manager->persist($jobs[count($jobs) - 1]);
+        array_push($jobs, (new Job())->setName("Agent de sécurité"));
+        $manager->persist($jobs[count($jobs) - 1]);
 
-        array_push($jobs, $job);
+        $manager->flush();
 
         return $jobs;
     }
