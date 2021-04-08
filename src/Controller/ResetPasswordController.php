@@ -5,22 +5,18 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
-use Swift;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Notification\ResetPasswordNotification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
-use Swift_Mailer;
-use Swift_Message;
-use Twig\Environment;
+
 /**
  * @Route("/reset-password")
  */
@@ -29,31 +25,34 @@ class ResetPasswordController extends AbstractController
     use ResetPasswordControllerTrait;
 
     private $resetPasswordHelper;
+    private $resetPasswordNotification;
 
-      /**
-     * @param Environment $renderer
+    /**
+     * @param ResetPasswordHelperInterface $resetPasswordHelper
+     * @param ResetPasswordNotification $resetPasswordNotification
      */
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, Environment $renderer)
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, ResetPasswordNotification $resetPasswordNotification)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->renderer = $renderer;
+        $this->resetPasswordNotification = $resetPasswordNotification;
     }
 
     /**
      * Display & process form to request a password reset.
      *
      * @Route("", name="app_forgot_password_request")
+     * @param Request $request
+     * @return Response
      */
-    public function request(Request $request, Swift_Mailer $mailer): Response
+    public function request(Request $request): Response
     {
-        $this->mailer = $mailer;
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
-                $mailer
+                $this->resetPasswordNotification
             );
         }
 
@@ -83,6 +82,10 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      *
      * @Route("/reset/{token}", name="app_reset_password")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param string|null $token
+     * @return Response
      */
     public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null): Response
     {
@@ -138,7 +141,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, Swift_Mailer $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, ResetPasswordNotification $notification): RedirectResponse
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -151,7 +154,7 @@ class ResetPasswordController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('login');
         }
-        try {           
+        try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash('reset_password_error', sprintf(
@@ -161,21 +164,8 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_check_email');
         }
-     
-        $email = (new Swift_Message('Réintialiser votre mot de passe.'))
-        ->setFrom('noreply@covidia.fr')
-        ->setTo($user->getEmail())
-        ->setReplyTo($user->getEmail())
-        ->setBody($this->renderer->render('reset_password/email.html.twig', [
-            'resetToken' => $resetToken,
-            'text/html'
-        ]));
-        if ($mailer->send($email) == 0) {
-        $this->addFlash('warning', "Erreur lors de l'envoi du mail");
-        } else {
-        $this->addFlash('success', "Un mail vient d'etre envoye !");
-        }
-        
+
+        $notification->notify($user->getEmail(), $resetToken);
 
         return $this->redirectToRoute('app_check_email');
     }
