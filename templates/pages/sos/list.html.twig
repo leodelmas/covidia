@@ -10,48 +10,89 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Personnel</th>
+                <th>Utilisateur</th>
+                <th>Téléphone</th>
+                <th>E-mail</th>
                 <th>Message</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            {% for sos in soss %}
-                <tr>
+            {% for sos in sosRequests %}
+                <tr class="{% if sos.isClosed == 1 %}table-success{% endif %}">
                     <td>{{ sos.id }}</td>
-                    {% if sos.isAnonymous == 1 %}
-                        <td>Anonyme</td>
-                    {% else %}
-                        <td>{{ sos.user.firstname }} {{ sos.user.lastname }}</td>
-                    {% endif %}
-                    <td>{{ sos.message }}</td>
                     <td>
-                        <form method="POST" action="{{ path('sos.close', {id: sos.id}) }}"
-                              style="display: inline-block"
-                              onsubmit="return confirm('Êtes-vous sûr de vouloir fermer ce SOS ?')">
-                            <input type="hidden" name="_method" value="CLOSE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('close' ~ sos.id) }}">
-                            <button class="btn btn-success"><i class="fas fa-check"></i></button>
-                        </form>
-                        <form method="POST" action="{{ path('sos.delete', {id: sos.id}) }}"
-                              style="display: inline-block"
-                              onsubmit="return confirm('Êtes-vous sûr de supprimer ce SOS ?')">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sos.id) }}">
-                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                        </form>
+                        {% if sos.isAnonymous == 1 %}
+                            Anonyme
+                        {% else %}
+                            {{ sos.user.firstname }} {{ sos.user.lastname }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if sos.isAnonymous == 1 %}
+                            --
+                        {% else %}
+                            {{ sos.user.phone }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if sos.isAnonymous == 1 %}
+                            --
+                        {% else %}
+                            {{ sos.user.email }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if sos.message|length > 50 %}
+                            {{ sos.message|slice(1, 50) }}...
+                            <a href="#" data-toggle="modal" data-target="#sos{{ sos.id }}Modal">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <div class="modal fade" id="sos{{ sos.id }}Modal" tabindex="-1"
+                                 aria-labelledby="sos{{ sos.id }}ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="sos{{ sos.id }}ModalLabel">Message SOS
+                                                n°{{ sos.id }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {{ sos.message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            {{ sos.message }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if sos.isClosed == 0 %}
+                            <form method="POST" action="{{ path('sos.close', {id: sos.id}) }}"
+                                  style="display: inline-block"
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir fermer ce SOS ?')">
+                                <input type="hidden" name="_method" value="CLOSE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('close' ~ sos.id) }}">
+                                <button class="btn btn-success"><i class="fas fa-check"></i></button>
+                            </form>
+                        {% else %}
+                            --
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">Aucun Sos</td>
+                    <td colspan="6">Aucun Sos</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         <div class="d-flex justify-content-between">
             <div class="pagination">
-                {{ knp_pagination_render(soss) }}
+                {{ knp_pagination_render(sosRequests) }}
             </div>
         </div>
     </div>

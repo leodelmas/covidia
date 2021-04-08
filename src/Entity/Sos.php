@@ -22,8 +22,8 @@ class Sos {
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     * @Assert\Length(min=5, max=50)
+     * @ORM\Column(type="text")
+     * @Assert\Length(min=20, max=2000)
      * @Assert\NotBlank()
      */
     private $message;
