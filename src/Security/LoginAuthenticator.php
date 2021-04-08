@@ -135,5 +135,6 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         if ($this->session->get('need_auth_two', false) === true) {
             return $this->urlGenerator->generate(ValidationCodeAuthenticator::LOGIN_ROUTE);
         }
+        return $this->urlGenerator->generate($this::LOGIN_ROUTE);
     }
 }
