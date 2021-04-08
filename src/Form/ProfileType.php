@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class ProfileType extends AbstractType {
 
@@ -34,8 +35,12 @@ class ProfileType extends AbstractType {
             ->add('lastname', TextType::class, [
                 'label' => false
             ])
-            ->add('password', PasswordType::class, [
-                'label' => false
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les champs doivent correspondre.',
+                'options' => ['always_empty' => false],
+                'first_options'  => ['label' => 'Mot de passe actuel'],
+                'second_options'  => ['label' => 'Ressaisir le même mot de passe'],
             ])
             ->add('birthDate', DateType::class, [
                 'label' => false,
