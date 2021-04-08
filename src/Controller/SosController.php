@@ -34,7 +34,7 @@ class SosController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sos);
             $entityManager->flush();
-            return $this->redirectToRoute('planning.index');
+            return $this->redirectToRoute('sos.index');
         }
 
         return $this->render('pages/sos/index.html.twig', [
@@ -57,34 +57,15 @@ class SosController extends AbstractController {
             return $this->redirectToRoute('planning.index');
         }
         
-        $soss = $paginator->paginate(
-            $sosRepository->findBy(
-                array('isClosed' => 0)
-            ),
+        $sosRequests = $paginator->paginate(
+            $sosRepository->findAll(),
             $request->query->getInt('page', 1),
             20
         );
 
         return $this->render('pages/sos/list.html.twig', [
-            'soss' => $soss
+            'sosRequests' => $sosRequests
         ]);
-    }
-
-    /**
-     * @Route("/sos/{id}", name="sos.delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Sos $sos
-     * @return Response
-     */
-    public function delete(Request $request, Sos $sos): Response {
-        if ($this->isCsrfTokenValid('delete'.$sos->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($sos);
-            $entityManager->flush();
-            $this->addFlash('success', 'SOS supprimé avec succès !');
-        }
-
-        return $this->redirectToRoute('sos.list');
     }
 
     /**
