@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use Swift;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,7 +18,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
-
+use Swift_Mailer;
+use Swift_Message;
+use Twig\Environment;
 /**
  * @Route("/reset-password")
  */
@@ -27,9 +30,13 @@ class ResetPasswordController extends AbstractController
 
     private $resetPasswordHelper;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
+      /**
+     * @param Environment $renderer
+     */
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, Environment $renderer)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->renderer = $renderer;
     }
 
     /**
@@ -37,8 +44,9 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="app_forgot_password_request")
      */
-    public function request(Request $request, MailerInterface $mailer): Response
+    public function request(Request $request, Swift_Mailer $mailer): Response
     {
+        $this->mailer = $mailer;
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
@@ -130,7 +138,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, Swift_Mailer $mailer): RedirectResponse
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -141,35 +149,33 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute('login');
         }
-
-        try {
+        try {           
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
-            // If you want to tell the user why a reset email was not sent, uncomment
-            // the lines below and change the redirect to 'app_forgot_password_request'.
-            // Caution: This may reveal if a user is registered or not.
-            //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     'There was a problem handling your password reset request - %s',
-            //     $e->getReason()
-            // ));
+            $this->addFlash('reset_password_error', sprintf(
+                'There was a problem handling your password reset request - %s',
+                $e->getReason()
+            ));
 
             return $this->redirectToRoute('app_check_email');
         }
-
-        $email = (new TemplatedEmail())
-            ->from(new Address('noreply@covidia.fr', 'Covidia'))
-            ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-            ])
-        ;
-
-        $mailer->send($email);
+     
+        $email = (new Swift_Message('Réintialiser votre mot de passe.'))
+        ->setFrom('noreply@covidia.fr')
+        ->setTo($user->getEmail())
+        ->setReplyTo($user->getEmail())
+        ->setBody($this->renderer->render('reset_password/email.html.twig', [
+            'resetToken' => $resetToken,
+            'text/html'
+        ]));
+        if ($mailer->send($email) == 0) {
+        $this->addFlash('warning', "Erreur lors de l'envoi du mail");
+        } else {
+        $this->addFlash('success', "Un mail vient d'etre envoye !");
+        }
+        
 
         return $this->redirectToRoute('app_check_email');
     }
