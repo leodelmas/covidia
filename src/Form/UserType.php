@@ -11,9 +11,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Security\Core\Security;
 
 class UserType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security) {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -37,7 +44,10 @@ class UserType extends AbstractType
                 'choice_label' => 'name'
             ])
             ->add('imageFile',FileType::class,[
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'placeholder' => $this->security->getUser()->getFileName()
+                ]
             ]);
     }
 

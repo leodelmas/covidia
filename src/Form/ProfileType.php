@@ -19,6 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ProfileType extends AbstractType {
 
+    private $security;
+
     public function __construct(Security $security) {
         $this->security = $security;
     }
@@ -47,6 +49,7 @@ class ProfileType extends AbstractType {
             ])
             ->add('imageFile',FileType::class,[
                 'required' => false,
+                'label' => $this->security->getUser()->getFileName(),
                 'attr' => [
                     'placeholder' => $this->security->getUser()->getFileName()
                 ]
