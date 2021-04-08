@@ -1,13 +1,15 @@
 {{ form_start(form) }}
-<div class="row">
-    <div class="col-md-4 mb-3">
-        {{ form_row(form.dateStart) }}
-    </div>
-    <div class="col-md-4 mb-3">
-        {{ form_row(form.dateEnd) }}
-    </div>
-    <div class="col-md-4 mb-3">
-        {{ form_row(form.isTeleworked) }}
+<div class="bg-white shadow-sm rounded px-4 pt-4 mb-4">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.dateStart) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.dateEnd) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form_row(form.isTeleworked) }}
+        </div>
     </div>
 </div>
 {{ form_rest(form) }}

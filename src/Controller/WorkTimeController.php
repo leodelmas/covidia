@@ -20,8 +20,10 @@ class WorkTimeController extends AbstractController {
 
     /**
      * @Route("/", name="workTime.index", methods={"GET"})
+     * @param PaginatorInterface $paginator
      * @param WorkTimeRepository $workTimeRepository
      * @param Security $security
+     * @param Request $request
      * @return Response
      */
     public function index(PaginatorInterface $paginator, WorkTimeRepository $workTimeRepository, Security $security, Request $request): Response
@@ -64,7 +66,7 @@ class WorkTimeController extends AbstractController {
                 $entityManager->flush();
                 $this->addFlash('success', 'Période créée avec succès !');
             }
-            return $this->redirectToRoute('planning.index');
+            return $this->redirectToRoute('workTime.index');
         }
 
         return $this->render('pages/planning/workTime/new.html.twig', [
@@ -95,7 +97,7 @@ class WorkTimeController extends AbstractController {
                 return $this->redirectToRoute('workTime.index');
             }
             $this->addFlash('success', 'Période modifiée avec succès !');
-            return $this->redirectToRoute('planning.index');
+            return $this->redirectToRoute('workTime.index');
         }
 
         return $this->render('pages/planning/workTime/edit.html.twig', [
@@ -118,6 +120,6 @@ class WorkTimeController extends AbstractController {
             $this->addFlash('success', 'Période supprimée avec succès !');
         }
 
-        return $this->redirectToRoute('planning.index');
+        return $this->redirectToRoute('workTime.index');
     }
 }

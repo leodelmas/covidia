@@ -21,8 +21,10 @@ class TaskController extends AbstractController
 {
     /**
      * @Route("/", name="task.index", methods={"GET"})
+     * @param PaginatorInterface $paginator
      * @param TaskRepository $taskRepository
      * @param Security $security
+     * @param Request $request
      * @return Response
      */
     public function index(PaginatorInterface $paginator, TaskRepository $taskRepository, Security $security, Request $request): Response
