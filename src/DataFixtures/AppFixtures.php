@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
     'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
 
     private $passwordEncoder;
-    protected $faker;
+    private $faker;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder) {
         $this->passwordEncoder = $passwordEncoder;
@@ -33,107 +33,137 @@ class AppFixtures extends Fixture
     {
         $jobs = $this->create_Jobs($manager);
         $users = $this->create_Users($manager, $jobs);
-        $tasks = $this->create_Tasks($manager);
-
-        $worktime = new WorkTime();
-        $worktime 
-            ->setDateStart(new DateTime('2021-02-01'))
-            ->setDateEnd(new DateTime('2021-02-05'))
-            ->setIsTeleworked(true)
-            ->setUser($users[1]);
-        $manager->persist($worktime);
-        $manager->flush();
-
-        $task = new Task();
-        $task 
-            ->setDateTimeStart(new DateTime('2021-02-01 08:30'))
-            ->setDateTimeEnd(new DateTime('2021-02-01 10:30'))
-            ->setWorkTime($worktime)
-            ->setUser($users[1])
-            ->setTaskCategory($tasks[1])
-            ->setComment("Je suis le test de l'ajout d'une catégorie");
-        $manager->persist($task);
-        $manager->flush();
+        $taskCategs = $this->create_TaskCategs($manager);
+        $work_times = $this->create_WorkTimes($manager, $users);
+        $tasks = $this->create_Tasks($manager, $work_times, $taskCategs);
     }
 
-    private function create_Tasks(ObjectManager $manager)
+    private function create_Tasks(ObjectManager $manager, Array $work_times, Array $taskCategs)
     {
         $tasks = array();
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        foreach ($work_times as &$work_time) {
+            for ($i = 0; $i < $this->faker->numberBetween(2, 8); $i++) {
+                do{
+                    $taskCateg = $taskCategs[$this->faker->numberBetween(0, count($taskCategs)-1)];
+                }while($taskCateg->getIsRemote() == 0 && $work_time->getIsTeleworked() == 1 ||
+                        $taskCateg->getIsPhysical() == 0 && $work_time->getIsTeleworked() == 0);
+
+                $task = new Task();
+                $task
+                    ->setDateTimeStart($this->faker->dateTimeBetween($work_time->getDateStart(), $work_time->getDateEnd()))
+                    ->setDateTimeEnd($this->faker->dateTimeBetween($task->getDateTimeStart(), $work_time->getDateEnd()))
+                    ->setWorkTime($work_time)
+                    ->setUser($work_time->getUser())
+                    ->setTaskCategory($taskCateg)
+                    ->setComment($this->faker->text($this->faker->numberBetween(20,100)));
+                $manager->persist($task);
+            }
+        }
+
+        $manager->flush();
+
+        return $tasks;
+    }
+
+    private function create_WorkTimes(ObjectManager $manager, Array $users)
+    {
+        $work_times = array();
+
+        foreach ($users as &$user) {
+            for ($i = 0; $i < $this->faker->numberBetween(2, 15); $i++) {
+                array_push($work_times, new WorkTime());
+                $work_times[count($work_times) - 1]
+                    ->setDateStart($this->faker->dateTimeBetween('-2 months', 'now'))
+                    ->setDateEnd($this->faker->dateTimeBetween($work_times[count($work_times) - 1]->getDateStart(), 'now'))
+                    ->setIsTeleworked($this->faker->boolean)
+                    ->setUser($user);
+                $manager->persist($work_times[count($work_times) - 1]);
+            }
+        }
+
+        $manager->flush();
+        return $work_times;
+    }
+
+    private function create_TaskCategs(ObjectManager $manager)
+    {
+        $taskCategs = array();
+
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Sécuriser')
             ->setIsRemote(false)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Réunion externe en vidéoconférence')
             ->setIsRemote(true)
             ->setIsPhysical(false)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Maintenance')
             ->setIsRemote(true)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Développement')
             ->setIsRemote(true)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Nettoyage')
             ->setIsRemote(false)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Nettoyage')
             ->setIsRemote(false)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Designer')
             ->setIsRemote(true)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Dessiner')
             ->setIsRemote(true)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
-        array_push($tasks, new TaskCategory());
-        $tasks[count($tasks) - 1]
+        array_push($taskCategs, new TaskCategory());
+        $taskCategs[count($taskCategs) - 1]
             ->setName('Formation')
             ->setIsRemote(true)
             ->setIsPhysical(true)
             ->setColor($this->faker->hexColor);
-        $manager->persist( $tasks[count($tasks) - 1]);
+        $manager->persist( $taskCategs[count($taskCategs) - 1]);
 
         $manager->flush();
-        return $tasks;
+        return $taskCategs;
     }
 
     private function create_Jobs(ObjectManager $manager)
