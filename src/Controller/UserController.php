@@ -3,19 +3,28 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\ProfileType;
 use App\Form\UserType;
+use App\Form\ProfileType;
+use App\Repository\UserRepository;
 use App\Repository\StatsRepository;
 use App\Repository\TaskCategoryRepository;
-use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController {
+
+
+   private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+    $this->passwordEncoder = $passwordEncoder;        
+    }
 
     /**
      * @Route("/admin/users", name="user.index", methods={"GET"})
@@ -47,6 +56,9 @@ class UserController extends AbstractController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword( 
+                $this->passwordEncoder->encodePassword( $user, $user->getPassword() )
+            );
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -71,6 +83,9 @@ class UserController extends AbstractController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword( 
+                $this->passwordEncoder->encodePassword( $user, $user->getPassword() )
+            );
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Utilisateur modifié avec succès !');
             return $this->redirectToRoute('user.index');
