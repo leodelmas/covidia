@@ -35,7 +35,7 @@ class ResetPasswordNotification {
     public function notify(string $email, ResetPasswordToken $resetToken): int
     {
         $resetPasswordMessage = (new Swift_Message("Covidia : Réinitialisation du mdp"))
-            ->setFrom('noreply@covidia.fr')
+            ->setFrom('noreply@covidia.xyz')
             ->setTo($email)
             ->setBody($this->renderer->render('emails/reset_password.html.twig', [
                 'resetToken' => $resetToken

@@ -45,14 +45,14 @@ class SosNotification {
      */
     public function notify(Sos $sos) {
         $psychologistMessage = (new Swift_Message("Covidia : SOS psychologue"))
-            ->setFrom('noreply@covidia.fr')
+            ->setFrom('noreply@covidia.xyz')
             ->setTo($this->psychologistMail)
             ->setBody($this->renderer->render('emails/sos/psychologist.html.twig', [
                 'sos' => $sos
             ]), 'text/html');
 
         $userMessage = (new Swift_Message("Covidia : SOS psychologue"))
-            ->setFrom('noreply@covidia.fr')
+            ->setFrom('noreply@covidia.xyz')
             ->setTo($sos->getUser()->getEmail())
             ->setBody($this->renderer->render('emails/sos/user.html.twig', [
                 'sos' => $sos

@@ -33,7 +33,7 @@ class LoginNotification {
      */
     public function notify(string $email, string $code) {
         $loginMessage = (new Swift_Message("Covidia : Nouvelle connexion"))
-            ->setFrom('noreply@covidia.fr')
+            ->setFrom('noreply@covidia.xyz')
             ->setTo($email)
             ->setBody($this->renderer->render('emails/login.html.twig', [
                 'code' => $code
