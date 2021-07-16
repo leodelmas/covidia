@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         {% if sos.message|length > 50 %}
-                            {{ sos.message|slice(1, 50) }}...
+                            {{ sos.message|slice(0, 50) }}...
                             <a href="#" data-toggle="modal" data-target="#sos{{ sos.id }}Modal">
                                 <i class="fas fa-eye"></i>
                             </a>

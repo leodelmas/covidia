@@ -35,6 +35,7 @@ class SosNotification {
     public function __construct(Swift_Mailer $mailer, Environment $renderer) {
         $this->mailer = $mailer;
         $this->renderer = $renderer;
+
     }
 
     /**
@@ -43,14 +44,17 @@ class SosNotification {
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function notify(Sos $sos) {
-        $psychologistMessage = (new Swift_Message("Covidia : SOS psychologue"))
+    public function notify(Sos $sos, array $psychologists) {
+        foreach ($psychologists as $psychologist){
+            $psychologistMessage = (new Swift_Message("Covidia : SOS psychologue"))
             ->setFrom('noreply@covidia.xyz')
-            ->setTo($this->psychologistMail)
+            ->setTo($psychologist->getEmail())
             ->setBody($this->renderer->render('emails/sos/psychologist.html.twig', [
                 'sos' => $sos
             ]), 'text/html');
-
+            $this->mailer->send($psychologistMessage);
+        }
+      
         $userMessage = (new Swift_Message("Covidia : SOS psychologue"))
             ->setFrom('noreply@covidia.xyz')
             ->setTo($sos->getUser()->getEmail())
@@ -58,7 +62,7 @@ class SosNotification {
                 'sos' => $sos
             ]), 'text/html');
 
-        $this->mailer->send($psychologistMessage);
+        
         $this->mailer->send($userMessage);
     }
 }

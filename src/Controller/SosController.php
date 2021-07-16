@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Sos;
+use App\Entity\User;
 use App\Form\SosType;
 use App\Notification\SosNotification;
 use App\Repository\SosRepository;
+use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,14 +24,15 @@ class SosController extends AbstractController {
      * @param SosNotification $notification
      * @return Response
      */
-    public function index(Request $request, Security $security, SosNotification $notification): Response {
+    public function index(Request $request, Security $security, SosNotification $notification,UserRepository $userRepository): Response {
         $sos = new Sos();
         $sos->setUser($security->getUser());
         $form = $this->createForm(SosType::class, $sos);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $notification->notify($sos);
+            $psychologists = $userRepository->findBy(['isPsychologist' => 1]);
+            $notification->notify($sos,$psychologists);
             $this->addFlash('success', 'Votre message SOS a bien été envoyé.');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sos);
