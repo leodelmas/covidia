@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\PlanningSearch;
 use App\Entity\WorkTime;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -45,22 +44,9 @@ class WorkTimeRepository extends ServiceEntityRepository {
     }
 
     /**
-     * @param $userId
-     * @param PlanningSearch $search
-     * @return WorkTime[]
-     */
-    public function findAllFiltered(int $userId, PlanningSearch $search): array {
-        $query = $this->findAllByUserQuery($userId);
-
-        //TODO
-
-        return $query->getQuery()->getResult();
-    }
-
-    /**
-     * @param $userId
-     * @param $dateTimeStart
-     * @param $dateTimeEnd
+     * @param int $userId
+     * @param DateTime $dateTimeStart
+     * @param DateTime $dateTimeEnd
      * @return WorkTime|null
      * @throws NonUniqueResultException
      */
@@ -84,14 +70,15 @@ class WorkTimeRepository extends ServiceEntityRepository {
      * @throws NonUniqueResultException
      */
     public function findAlreadyPlannedWorkTime($userId, $dateStart, $dateEnd): ?WorkTime {
-        $query = $this->findAllByUserQuery($userId);
-        return $query
+        return $this->createQueryBuilder('p')
             ->andWhere(':dateStart BETWEEN p.dateStart AND p.dateEnd')
             ->orWhere(':dateEnd BETWEEN p.dateStart AND p.dateEnd')
             ->orWhere('p.dateStart BETWEEN :dateStart AND :dateEnd')
             ->orWhere('p.dateEnd BETWEEN :dateStart AND :dateEnd')
+            ->andWhere('p.user = :userId')
             ->setParameter('dateStart', $dateStart->format('Y-m-d'))
             ->setParameter('dateEnd', $dateEnd->format('Y-m-d'))
+            ->setParameter('userId', $userId)
             ->getQuery()
             ->getOneOrNullResult();
     }
