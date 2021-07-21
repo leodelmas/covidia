@@ -1,0 +1,15 @@
+// Dependencies
+@import "~bootstrap";
+@import "~flatpickr";
+@import '~@fullcalendar/core/main.min.css';
+@import '~@fullcalendar/timegrid/main.min.css';
+@import '~@fullcalendar/daygrid/main.min.css';
+@import '~@fullcalendar/bootstrap/main.min.css';
+@import '~select2/dist/css/select2.min.css';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import '~chart.js/dist/Chart.min.css';
+@import '~flatpickr/dist/plugins/monthSelect/style.css';
+
+// Custom
+@import "custom/global";
+@import "custom/mediaqueries";
