@@ -84,7 +84,7 @@ class UserController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword( 
-                $this->passwordEncoder->encodePassword( $user, $user->getPassword() )
+                $this->passwordEncoder->encodePassword($user, $user->getPassword())
             );
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Utilisateur modifié avec succès !');
@@ -140,10 +140,14 @@ class UserController extends AbstractController {
      * @return Response
      */
     public function editProfile(Security $security, Request $request): Response {
-        $form = $this->createForm(ProfileType::class, $security->getUser());
+        $user = $security->getUser();
+        $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $this->passwordEncoder->encodePassword($user, $user->getPassword())
+            );
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('user.profile');
         }

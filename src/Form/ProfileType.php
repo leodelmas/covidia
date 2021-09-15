@@ -37,10 +37,10 @@ class ProfileType extends AbstractType {
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'Les champs doivent correspondre.',
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'options' => ['always_empty' => false],
-                'first_options'  => ['label' => 'Mot de passe actuel'],
-                'second_options'  => ['label' => 'Ressaisir le même mot de passe'],
+                'first_options'  => ['label' => 'Password'],
+                'second_options'  => ['label' => 'ConfirmPassword'],
             ])
             ->add('birthDate', DateType::class, [
                 'label' => false,
